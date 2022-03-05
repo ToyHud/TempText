@@ -1,0 +1,172 @@
+Index: app/src/test/java/com/example/temptext/ExampleUnitTest.kt
+===================================================================
+diff --git a/app/src/test/java/com/example/temptext/ExampleUnitTest.kt b/app/src/test/java/com/example/temptext/ExampleUnitTest.kt
+deleted file mode 100644
+--- a/app/src/test/java/com/example/temptext/ExampleUnitTest.kt	
++++ /dev/null	
+@@ -1,17 +0,0 @@
+-package com.example.temptext
+-
+-import org.junit.Test
+-
+-import org.junit.Assert.*
+-
+-/**
+- * Example local unit test, which will execute on the development machine (host).
+- *
+- * See [testing documentation](http://d.android.com/tools/testing).
+- */
+-class ExampleUnitTest {
+-    @Test
+-    fun addition_isCorrect() {
+-        assertEquals(4, 2 + 2)
+-    }
+-}
+\ No newline at end of file
+Index: app/src/test/java/com/example/android/temptext/ExampleUnitTest.kt
+===================================================================
+diff --git a/app/src/test/java/com/example/android/temptext/ExampleUnitTest.kt b/app/src/test/java/com/example/android/temptext/ExampleUnitTest.kt
+deleted file mode 100644
+--- a/app/src/test/java/com/example/android/temptext/ExampleUnitTest.kt	
++++ /dev/null	
+@@ -1,17 +0,0 @@
+-package com.example.android.temptext
+-
+-import org.junit.Test
+-
+-import org.junit.Assert.*
+-
+-/**
+- * Example local unit test, which will execute on the development machine (host).
+- *
+- * See [testing documentation](http://d.android.com/tools/testing).
+- */
+-class ExampleUnitTest {
+-    @Test
+-    fun addition_isCorrect() {
+-        assertEquals(4, 2 + 2)
+-    }
+-}
+\ No newline at end of file
+Index: app/src/main/java/com/example/android/temptext/network/FusedLocation.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.android.temptext.network\r\n\r\nimport android.Manifest\r\nimport android.annotation.SuppressLint\r\nimport android.app.Activity\r\nimport android.app.Application\r\nimport android.content.pm.PackageManager\r\nimport android.util.Log\r\nimport androidx.core.app.ActivityCompat\r\nimport com.google.android.gms.location.FusedLocationProviderClient\r\nimport com.google.android.gms.tasks.CancellationTokenSource\r\n\r\nclass FusedLocation {\r\n    private val cancellationTokenSource = CancellationTokenSource()\r\n    private val REQUEST_PERMISSIONS_REQUEST_CODE = 34\r\n    private val TAG = \"MainActivity\"\r\n    private lateinit var fusedLocationClient: FusedLocationProviderClient\r\n    private lateinit var application: Application\r\n    private lateinit var activity: Activity\r\n    /* *\r\n     * Provides a simple way of getting a device's location and is well suited for\r\n     * applications that do not require a fine-grained location and that do not need location\r\n     * updates. Gets the best and most recent location currently available, which may be null\r\n     * in rare cases when a location is not available.\r\n     *\r\n     * Note: this method should be called after location permission has been granted.\r\n     */\r\n    @SuppressLint(\"MissingPermission\")\r\n    fun getLastLocation() {\r\n        fusedLocationClient.lastLocation\r\n            .addOnCompleteListener { location ->\r\n                if (location.isSuccessful && location.result != null) {\r\n                    val location = location.result\r\n                    println(\"$location\")\r\n\r\n                    Log.d(\"MainAct\", \"$location\")\r\n                } else {\r\n                    Log.d(\"MainActError\", \"getLastLocation:exception\", location.exception)\r\n                }\r\n                cancellationTokenSource.cancel()\r\n            }\r\n    }\r\n    /**\r\n     * Return the current state of the permissions needed.\r\n     */\r\n    fun checkPermissions() =\r\n        ActivityCompat.checkSelfPermission(\r\n            application.applicationContext,\r\n            Manifest.permission.ACCESS_COARSE_LOCATION\r\n        ) == PackageManager.PERMISSION_GRANTED\r\n\r\n    private fun startLocationPermissionRequest() {\r\n        ActivityCompat.requestPermissions(\r\n            activity.parent, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),\r\n            REQUEST_PERMISSIONS_REQUEST_CODE\r\n        )\r\n    }\r\n    fun requestPermissions() {\r\n        if (ActivityCompat.shouldShowRequestPermissionRationale(\r\n                activity.parent,\r\n                Manifest.permission.ACCESS_COARSE_LOCATION\r\n            )\r\n        ) {\r\n            // Provide an additional rationale to the user. This would happen if the user denied the\r\n            // request previously, but didn't check the \"Don't ask again\" checkbox.\r\n            Log.i(TAG, \"Displaying permission rationale to provide additional context.\")\r\n            // Request permission\r\n            startLocationPermissionRequest()\r\n\r\n        } else {\r\n            // Request permission. It's possible this can be auto answered if device policy\r\n            // sets the permission in a given state or the user denied the permission\r\n            // previously and checked \"Never ask again\".\r\n            Log.i(TAG, \"Requesting permission\")\r\n            startLocationPermissionRequest()\r\n        }\r\n    }\r\n}
+===================================================================
+diff --git a/app/src/main/java/com/example/android/temptext/network/FusedLocation.kt b/app/src/main/java/com/example/android/temptext/network/FusedLocation.kt
+--- a/app/src/main/java/com/example/android/temptext/network/FusedLocation.kt	
++++ b/app/src/main/java/com/example/android/temptext/network/FusedLocation.kt	
+@@ -3,20 +3,22 @@
+ import android.Manifest
+ import android.annotation.SuppressLint
+ import android.app.Activity
+-import android.app.Application
++import android.content.Context
+ import android.content.pm.PackageManager
+ import android.util.Log
+ import androidx.core.app.ActivityCompat
+ import com.google.android.gms.location.FusedLocationProviderClient
++import com.google.android.gms.location.LocationServices
+ import com.google.android.gms.tasks.CancellationTokenSource
+ 
+ class FusedLocation {
+     private val cancellationTokenSource = CancellationTokenSource()
+-    private val REQUEST_PERMISSIONS_REQUEST_CODE = 34
+     private val TAG = "MainActivity"
++    private val REQUEST_PERMISSIONS_REQUEST_CODE = 34
++    /**
++     * Provides the entry point to the Fused Location Provider API.
++     */
+     private lateinit var fusedLocationClient: FusedLocationProviderClient
+-    private lateinit var application: Application
+-    private lateinit var activity: Activity
+     /* *
+      * Provides a simple way of getting a device's location and is well suited for
+      * applications that do not require a fine-grained location and that do not need location
+@@ -26,7 +28,12 @@
+      * Note: this method should be called after location permission has been granted.
+      */
+     @SuppressLint("MissingPermission")
+-    fun getLastLocation() {
++    fun getLastLocation(context: Context) {
++    /*
++     * Instantiates Fused Location Provider
++     */
++        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
++
+         fusedLocationClient.lastLocation
+             .addOnCompleteListener { location ->
+                 if (location.isSuccessful && location.result != null) {
+@@ -43,21 +50,21 @@
+     /**
+      * Return the current state of the permissions needed.
+      */
+-    fun checkPermissions() =
++    fun checkPermissions(context: Context) =
+         ActivityCompat.checkSelfPermission(
+-            application.applicationContext,
++            context,
+             Manifest.permission.ACCESS_COARSE_LOCATION
+         ) == PackageManager.PERMISSION_GRANTED
+ 
+-    private fun startLocationPermissionRequest() {
++    private fun startLocationPermissionRequest(activity: Activity) {
+         ActivityCompat.requestPermissions(
+-            activity.parent, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
++            activity, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+             REQUEST_PERMISSIONS_REQUEST_CODE
+         )
+     }
+-    fun requestPermissions() {
++    fun requestPermissions(activity: Activity) {
+         if (ActivityCompat.shouldShowRequestPermissionRationale(
+-                activity.parent,
++                activity,
+                 Manifest.permission.ACCESS_COARSE_LOCATION
+             )
+         ) {
+@@ -65,14 +72,14 @@
+             // request previously, but didn't check the "Don't ask again" checkbox.
+             Log.i(TAG, "Displaying permission rationale to provide additional context.")
+             // Request permission
+-            startLocationPermissionRequest()
++            startLocationPermissionRequest(activity)
+ 
+         } else {
+             // Request permission. It's possible this can be auto answered if device policy
+             // sets the permission in a given state or the user denied the permission
+             // previously and checked "Never ask again".
+             Log.i(TAG, "Requesting permission")
+-            startLocationPermissionRequest()
++            startLocationPermissionRequest(activity)
+         }
+     }
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/example/android/temptext/network/WeatherApiService.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.android.temptext.network\r\n\r\nimport com.example.android.temptext.BuildConfig\r\nimport com.squareup.moshi.Moshi\r\nimport com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory\r\nimport okhttp3.OkHttpClient\r\nimport okhttp3.logging.HttpLoggingInterceptor\r\nimport retrofit2.Retrofit\r\nimport retrofit2.converter.moshi.MoshiConverterFactory\r\nimport retrofit2.http.GET\r\nimport retrofit2.http.Path\r\nimport retrofit2.http.Query\r\n\r\nprivate const val BASE_URL = \"https://api.weatherapi.com/v1/\"\r\nprivate const val API_KEY = BuildConfig.WEATHER_API_KEY\r\n//https://github.com/square/moshi#custom-type-adapters\r\nprivate val networkLoggingInterceptor =\r\n    HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)\r\n\r\nprivate val moshi = Moshi.Builder()\r\n    .add(KotlinJsonAdapterFactory())\r\n    .build()\r\n\r\nprivate val retrofit = Retrofit.Builder()\r\n    .client(OkHttpClient.Builder().addInterceptor(networkLoggingInterceptor).build())\r\n    .addConverterFactory(MoshiConverterFactory.create(moshi))\r\n    .baseUrl(BASE_URL)\r\n    .build()\r\n\r\ninterface WeatherApiService {\r\n    ///alerts/active/area/{area}\"\r\n    @GET(\"current.json?\")\r\n    //try @GET for just area. check retrofit site\r\n    //so @Path(area=string)area:String?\r\n    suspend fun getCurrentWeather(@Query(\"key\") key:String? = null, @Query(\"q\") query: String?=null, @Query(\"aqi\") aqi: String? = null): WeatherResponse\r\n\r\n}\r\n\r\nobject WeatherAlertApi{\r\n    val retrofitService: WeatherApiService by lazy {\r\n        retrofit.create((WeatherApiService::class.java))\r\n    }\r\n}\r\n
+===================================================================
+diff --git a/app/src/main/java/com/example/android/temptext/network/WeatherApiService.kt b/app/src/main/java/com/example/android/temptext/network/WeatherApiService.kt
+--- a/app/src/main/java/com/example/android/temptext/network/WeatherApiService.kt	
++++ b/app/src/main/java/com/example/android/temptext/network/WeatherApiService.kt	
+@@ -1,6 +1,5 @@
+ package com.example.android.temptext.network
+ 
+-import com.example.android.temptext.BuildConfig
+ import com.squareup.moshi.Moshi
+ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+ import okhttp3.OkHttpClient
+@@ -8,11 +7,9 @@
+ import retrofit2.Retrofit
+ import retrofit2.converter.moshi.MoshiConverterFactory
+ import retrofit2.http.GET
+-import retrofit2.http.Path
+ import retrofit2.http.Query
+ 
+ private const val BASE_URL = "https://api.weatherapi.com/v1/"
+-private const val API_KEY = BuildConfig.WEATHER_API_KEY
+ //https://github.com/square/moshi#custom-type-adapters
+ private val networkLoggingInterceptor =
+     HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
