@@ -2,8 +2,10 @@ package com.example.android.temptext
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.viewModels
+import com.example.android.temptext.viewmodel.TempTextViewModel
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.example.android.temptext.network.ForegroundOnlyLocationService
@@ -14,7 +16,10 @@ import kotlinx.coroutines.launch
 
 private const val API_KEY = BuildConfig.WEATHER_API_KEY
 
-class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
+class MainActivity : AppCompatActivity() {
+
+    private val viewModel: TempTextViewModel by viewModels()
+
     /**
      * Provides the entry point to the Fused Location Provider API.
      * FusedLocationProviderClient - Main class for receiving location updates.
