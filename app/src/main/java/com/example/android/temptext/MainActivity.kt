@@ -91,8 +91,4 @@ class MainActivity : AppCompatActivity() {
             fusedLocation.getLastLocation(this)
         }
     }
-
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        TODO("Not yet implemented")
-    }
 }
