@@ -1,11 +1,12 @@
 package com.example.android.temptext
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
-import com.example.android.temptext.network.FusedLocation
+import com.example.android.temptext.network.ForegroundOnlyLocationService
 import com.example.android.temptext.network.WeatherAlertApi
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -13,7 +14,7 @@ import kotlinx.coroutines.launch
 
 private const val API_KEY = BuildConfig.WEATHER_API_KEY
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
     /**
      * Provides the entry point to the Fused Location Provider API.
      * FusedLocationProviderClient - Main class for receiving location updates.
@@ -57,7 +58,7 @@ class MainActivity : AppCompatActivity() {
                 dayOfWeek.value = WeatherAlertApi.retrofitService.getCurrentWeather(API_KEY,"NY", "yes").currentWeather?.dayOfWeek!!
                 windMph.value = WeatherAlertApi.retrofitService.getCurrentWeather(API_KEY,"NY", "yes").currentWeather?.windMph!!
                 precipitation.value = WeatherAlertApi.retrofitService.getCurrentWeather(API_KEY,"NY", "yes").currentWeather?.precipitation!!
-                carbonMonoxide.value = WeatherAlertApi.retrofitService.getCurrentWeather(API_KEY,"NY", "yes").currentWeather?.aqi?.carbonMonoxide!!
+//                carbonMonoxide.value = WeatherAlertApi.retrofitService.getCurrentWeather(API_KEY,"NY", "yes").currentWeather?.aqi?.carbonMonoxide!!
 
                 Log.d("MainActivityCity",city.value.toString())
                 Log.d("MainActivityRegion",state.value.toString())
@@ -78,11 +79,15 @@ class MainActivity : AppCompatActivity() {
          * Check permissions when activity starts
          * */
 
-        val fusedLocation = FusedLocation()
-        if (!fusedLocation.checkPermissions()) {
-            fusedLocation.requestPermissions()
+        val fusedLocation = ForegroundOnlyLocationService()
+        if (!fusedLocation.checkPermissions(this)) {
+            fusedLocation.requestPermissions(this)
         } else {
-            fusedLocation.getLastLocation()
+            fusedLocation.getLastLocation(this)
         }
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        TODO("Not yet implemented")
     }
 }

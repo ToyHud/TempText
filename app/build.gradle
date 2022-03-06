@@ -48,8 +48,10 @@ dependencies {
     implementation 'com.squareup.moshi:moshi-kotlin:1.9.3'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.7.2'
     // ViewModel
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.1'
+    //local broadcast manager
+    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
     //Google Play Services
     implementation 'com.google.android.gms:play-services-location:19.0.1'
     // LiveData
