@@ -1,8 +1,4 @@
 <resources>
-<<<<<<< HEAD
-    <string name="app_name">TT1</string>
     <string name="cloudy">cloudy</string>
-=======
     <string name="app_name">TempText</string>
->>>>>>> 57506f731565b08e837be11417cd8f39bbd55882
 </resources>
