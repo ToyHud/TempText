@@ -14,7 +14,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.CancellationTokenSource
 import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
-
+private const val API_KEY = BuildConfig.WEATHER_API_KEY
 class MainActivity : AppCompatActivity() {
 
     private val viewModel: TempTextViewModel by viewModels()
@@ -54,6 +54,7 @@ class MainActivity : AppCompatActivity() {
                     val latitude = location.result.latitude
                     val longitude = location.result.longitude
                     val currentLocation = "$latitude,$longitude"
+                    viewModel.showCurrentWeather(API_KEY, currentLocation,"yes")
                 } else {
                     Log.d("ForeGroundError", "getLastLocation:exception", location.exception)
                 }
@@ -65,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.fahrenheit.observe(this, { _ ->
             degreeTextView.text = viewModel.fahrenheit.value!!.roundToInt().toString()
         })
-        val apiResponse = viewModel.currentWeather.observe(this, {
+        viewModel.currentWeather.observe(this, {
             statusTextView.text = viewModel.currentWeather.value!!
         })
     }

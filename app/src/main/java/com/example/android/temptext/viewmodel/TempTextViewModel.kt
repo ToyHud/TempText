@@ -11,23 +11,24 @@ import kotlinx.coroutines.launch
 private const val API_KEY = BuildConfig.WEATHER_API_KEY
 
 class TempTextViewModel : ViewModel(){
-    private val apiKey = API_KEY
-    private val aqi: String = "yes"
+    private var appApiKey = API_KEY
+    private var appAqi: String = "yes"
+    private var appArea = "NY"
+
     private val _city = MutableLiveData<String>()
     val city: LiveData<String> = _city
 
-    private val state = "NY"
-/*    private val _state = MutableLiveData<String>()
-    val state: LiveData<String> = _state*/
+    private var _state = MutableLiveData<String>()
+    val state: LiveData<String> = _state
 
-    private val _currentWeather= MutableLiveData<String>()
+    private var _currentWeather= MutableLiveData<String>()
     val currentWeather: LiveData<String> = _currentWeather
 
-    private val _fahrenheit = MutableLiveData<Float>()
+    private var _fahrenheit = MutableLiveData<Float>()
     val fahrenheit: LiveData<Float> = _fahrenheit
 
     init {
-        getCurrentWeather(apiKey, state, aqi)
+        getCurrentWeather(appApiKey, appArea, appAqi)
     }
     //change area back to LiveData<String>
     private fun getCurrentWeather(apiKey: String, area: String, aqi: String) {
@@ -42,5 +43,10 @@ class TempTextViewModel : ViewModel(){
         catch (e: Exception) {
             "Failure: ${e.message}"
         }
+    }
+    fun showCurrentWeather(apiKey: String, area: String, aqi: String){
+        appApiKey = apiKey
+        appArea = area
+        appAqi = aqi
     }
 }
