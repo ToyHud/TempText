@@ -61,7 +61,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="36dp"
-        android:text="Clear Sky"
+        android:hint="@string/weather_status"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/temp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -76,7 +76,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:fontFamily="sans-serif-light"
-        android:text="39°F"
+        android:hint="@string/current_temp"
         android:textSize="80sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -84,32 +84,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.434">
-
     </TextView>
 
     <ImageView
         android:id="@+id/humidity"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginStart="276dp"
-        android:layout_marginTop="1108dp"
+        android:layout_marginStart="72dp"
+        android:layout_marginTop="544dp"
         android:src="@drawable/humidity"
         app:layout_constraintStart_toEndOf="@+id/precip"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="#FFF">
-
-    </ImageView>
+        app:tint="#FFF" />
 
     <ImageView
         android:id="@+id/cloudy"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginStart="64dp"
+        android:layout_marginStart="44dp"
         android:src="@drawable/cloudy"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.824"
+        app:layout_constraintVertical_bias="0.851"
         app:tint="#FFF">
 
     </ImageView>
@@ -118,8 +115,8 @@
         android:id="@+id/precip"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginStart="272dp"
-        android:layout_marginTop="340dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="84dp"
         android:src="@drawable/precipitation"
         app:layout_constraintStart_toEndOf="@+id/cloudy"
         app:layout_constraintTop_toBottomOf="@+id/button" />
@@ -127,11 +124,9 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="1188dp"
         android:text="Precip"
         android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
     </TextView>

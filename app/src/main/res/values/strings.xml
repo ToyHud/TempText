@@ -1,4 +1,6 @@
 <resources>
     <string name="cloudy">cloudy</string>
     <string name="app_name">TempText</string>
+    <string name="weather_status">Weather</string>
+    <string name="current_temp">39°F</string>
 </resources>

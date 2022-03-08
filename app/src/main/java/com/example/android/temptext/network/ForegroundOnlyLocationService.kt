@@ -20,7 +20,6 @@ import com.google.android.gms.tasks.CancellationTokenSource
 import java.util.concurrent.TimeUnit
 
 class ForegroundOnlyLocationService : Service() {
-    private val cancellationTokenSource = CancellationTokenSource()
     /*
      * Checks whether the bound activity has really gone away (foreground service with notification
     * created) or simply orientation change.
@@ -52,22 +51,7 @@ class ForegroundOnlyLocationService : Service() {
      *
      * Note: this method should be called after location permission has been granted.
      */
-    @SuppressLint("MissingPermission")
-    fun getLastLocation(activity: Activity) {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
-        fusedLocationClient.lastLocation
-            .addOnCompleteListener { location ->
-                if (location.isSuccessful && location.result != null) {
-                    val location = location.result
-                    println("$location")
 
-                    Log.d("MainAct", "$location")
-                } else {
-                    Log.d("MainActError", "getLastLocation:exception", location.exception)
-                }
-                cancellationTokenSource.cancel()
-            }
-    }
     override fun onCreate() {
         Log.d(TAG, "onCreate()")
 

@@ -1,5 +1,6 @@
 package com.example.android.temptext.network
 
+import androidx.lifecycle.LiveData
 import com.example.android.temptext.BuildConfig
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -8,7 +9,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 private const val BASE_URL = "https://api.weatherapi.com/v1/"
@@ -30,9 +30,8 @@ private val retrofit = Retrofit.Builder()
 interface WeatherApiService {
     ///alerts/active/area/{area}"
     @GET("current.json?")
-    //try @GET for just area. check retrofit site
-    //so @Path(area=string)area:String?
-    suspend fun getCurrentWeather(@Query("key") key:String? = null, @Query("q") query: String?=null, @Query("aqi") aqi: String? = null): WeatherResponse
+    //change query back to LiveData<String>
+    suspend fun getCurrentWeather(@Query("key") key:String? = null, @Query("q") query: String, @Query("aqi") aqi: String? = null): WeatherResponse
 
 }
 

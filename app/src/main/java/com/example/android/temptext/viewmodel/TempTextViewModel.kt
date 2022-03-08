@@ -4,44 +4,43 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.ViewModel
+import com.example.android.temptext.BuildConfig
+import com.example.android.temptext.network.WeatherAlertApi
 import kotlinx.coroutines.launch
 
+private const val API_KEY = BuildConfig.WEATHER_API_KEY
+
 class TempTextViewModel : ViewModel(){
-    private val apiKey: String= ""
-    private val area: String= ""
+    private val apiKey = API_KEY
+    private val aqi: String = "yes"
     private val _city = MutableLiveData<String>()
     val city: LiveData<String> = _city
-    private val _state = MutableLiveData<String>()
-    val state: LiveData<String> = _state
+
+    private val state = "NY"
+/*    private val _state = MutableLiveData<String>()
+    val state: LiveData<String> = _state*/
+
     private val _currentWeather= MutableLiveData<String>()
     val currentWeather: LiveData<String> = _currentWeather
-    private val _weatherIcon = MutableLiveData<String>()
-    val weatherIcon: LiveData<String> = _weatherIcon
-    private val _celsius = MutableLiveData<Float>()
-    val celsius: LiveData<Float> = _celsius
+
     private val _fahrenheit = MutableLiveData<Float>()
     val fahrenheit: LiveData<Float> = _fahrenheit
 
     init {
-
-        getCurrentWeather(apiKey, area)
-
+        getCurrentWeather(apiKey, state, aqi)
     }
-
-    fun getCurrentWeather(apiKey: String, area:String) {
+    //change area back to LiveData<String>
+    private fun getCurrentWeather(apiKey: String, area: String, aqi: String) {
         try {
             viewModelScope.launch {
-               // city.value = WeatherAlertApi.retrofitService.getCurrentWeather(apiKey , area).currentLocation?.city
-                //state.value = WeatherAlertApi.retrofitService.getCurrentWeather(apiKey , area).currentLocation?.state
-                //currentWeather.value = WeatherAlertApi.retrofitService.getCurrentWeather(apiKey , area).currentWeather?.currentWeatherCondition?.currentCondition
-                //weatherIcon.value = WeatherAlertApi.retrofitService.getCurrentWeather(apiKey , area).currentWeather?.currentWeatherCondition?.weatherIcon
-                //celsius.value = WeatherAlertApi.retrofitService.getCurrentWeather(apiKey , area).currentWeather?.celsius
-                //fahrenheit.value = WeatherAlertApi.retrofitService.getCurrentWeather(apiKey , area).currentWeather?.fahrenheit
+                _city.value = WeatherAlertApi.retrofitService.getCurrentWeather(apiKey, area, aqi).currentLocation?.city!!
+                //_state.value = WeatherAlertApi.retrofitService.getCurrentWeather(apiKey, area, aqi).currentLocation?.state!!
+                _currentWeather.value = WeatherAlertApi.retrofitService.getCurrentWeather(apiKey , area, aqi).currentWeather?.currentWeatherCondition!!.currentCondition!!
+                _fahrenheit.value = WeatherAlertApi.retrofitService.getCurrentWeather(apiKey, area, aqi).currentWeather?.fahrenheit!!
             }
         }
         catch (e: Exception) {
             "Failure: ${e.message}"
         }
     }
-
 }
