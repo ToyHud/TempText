@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.SearchView
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -19,7 +20,7 @@ class MainActivity : AppCompatActivity() {
 
     private val viewModel: TempTextViewModel by viewModels()
     private val cancellationTokenSource = CancellationTokenSource()
-    private lateinit var locationTextView: TextView
+    private lateinit var locationTextView: SearchView
     private lateinit var statusTextView: TextView
     private lateinit var degreeTextView: TextView
     private lateinit var alertsButton: Button
@@ -34,10 +35,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        locationTextView = findViewById(R.id.location)
-        statusTextView = findViewById(R.id.status)
-        degreeTextView = findViewById(R.id.temp)
-        alertsButton = findViewById(R.id.button)
+        locationTextView = findViewById(R.id.searchView)
+        statusTextView = findViewById(R.id.weatherStatus)
+        degreeTextView = findViewById(R.id.currentTemp)
+        alertsButton = findViewById(R.id.notiBtn)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         displayWeather()
