@@ -1,88 +1,29 @@
 package com.example.android.temptext
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
-import android.widget.Button
-import android.widget.SearchView
-import android.widget.TextView
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.example.android.temptext.network.ForegroundOnlyLocationService
-import com.example.android.temptext.viewmodel.TempTextViewModel
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.tasks.CancellationTokenSource
-import kotlin.math.absoluteValue
-import kotlin.math.roundToInt
-private const val API_KEY = BuildConfig.WEATHER_API_KEY
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupActionBarWithNavController
+import com.example.android.temptext.databinding.ActivityMainBinding
+
 class MainActivity : AppCompatActivity() {
 
-    private val viewModel: TempTextViewModel by viewModels()
-    private val cancellationTokenSource = CancellationTokenSource()
-    private lateinit var locationTextView: SearchView
-    private lateinit var statusTextView: TextView
-    private lateinit var degreeTextView: TextView
-    private lateinit var alertsButton: Button
-
-    /**
-     * Provides the entry point to the Fused Location Provider API.
-     * FusedLocationProviderClient - Main class for receiving location updates.
-     */
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var navController: NavController
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-//move to mainweather fragment
-        locationTextView = findViewById(R.id.searchView)
-     /*   statusTextView = findViewById(R.id.weatherStatus)
-        degreeTextView = findViewById(R.id.currentTemp)
-        alertsButton = findViewById(R.id.notiBtn)
-    */    fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        displayWeather()
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.nav_graph) as NavHostFragment
+        navController = navHostFragment.navController
 
-        //WeatherAlertApi.retrofitService.getCurrentWeather(apiKey , area, aqi).currentLocation?.state!!
+        //TODO set functionality for search button. should activity main be landing page?
     }
-
-    @SuppressLint("MissingPermission")
-    fun getLastLocation() {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        fusedLocationClient.lastLocation
-            .addOnCompleteListener { location ->
-                if (location.isSuccessful && location.result != null) {
-                    val latitude = location.result.latitude
-                    val longitude = location.result.longitude
-                    val currentLocation = "$latitude,$longitude"
-                    viewModel.showCurrentWeather(API_KEY, currentLocation,"yes")
-                } else {
-                    Log.d("ForeGroundError", "getLastLocation:exception", location.exception)
-                }
-                cancellationTokenSource.cancel()
-            }
-    }
-
-    private fun displayWeather() {
-        viewModel.fahrenheit.observe(this, { _ ->
-            degreeTextView.text = viewModel.fahrenheit.value!!.roundToInt().toString()
-        })
-        viewModel.currentWeather.observe(this, {
-            statusTextView.text = viewModel.currentWeather.value!!
-        })
-    }
-
-    override fun onStart() {
-        super.onStart()
-        /* *
-         * Check permissions when activity starts
-         * */
-
-        val fusedLocation = ForegroundOnlyLocationService()
-        if (!fusedLocation.checkPermissions(this)) {
-            fusedLocation.requestPermissions(this)
-        } else {
-            getLastLocation()
-        }
-    }
+   override fun onSupportNavigateUp(): Boolean {
+       return navController.navigateUp() || super.onSupportNavigateUp()
+   }
 }
