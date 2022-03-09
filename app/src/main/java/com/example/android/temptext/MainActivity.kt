@@ -34,12 +34,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+//move to mainweather fragment
         locationTextView = findViewById(R.id.searchView)
-        statusTextView = findViewById(R.id.weatherStatus)
+     /*   statusTextView = findViewById(R.id.weatherStatus)
         degreeTextView = findViewById(R.id.currentTemp)
         alertsButton = findViewById(R.id.notiBtn)
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+    */    fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         displayWeather()
 

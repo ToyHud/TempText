@@ -6,7 +6,19 @@
     android:layout_height="match_parent"
     android:background="@drawable/gradient_bg"
     tools:context=".MainActivity">
-    <!-- comment -->
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/nav_graph"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="411dp"
+        android:layout_marginBottom="731dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/nav_graph"/>
 
     <SearchView
         android:id="@+id/searchView"
@@ -18,143 +30,4 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/weatherStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="152dp"
-        android:text="@string/mostly_cloudy"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/currentTemp"
-        android:layout_width="152dp"
-        android:layout_height="112dp"
-        android:layout_marginTop="187dp"
-        android:layout_marginBottom="432dp"
-        android:fontFamily="sans-serif-thin"
-        android:text="@string/_30"
-        android:textColor="#F6F6F6"
-        android:textSize="96sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.544"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <ImageView
-        android:id="@+id/rain"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="512dp"
-        android:layout_marginEnd="306dp"
-        android:background="@drawable/raincloud"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ImageContrastCheck"
-        android:contentDescription="@string/rain_cloud_image" />
-
-    <ImageView
-        android:id="@+id/air"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="512dp"
-        android:autofillHints="alerts"
-        android:background="@drawable/airquality"
-        app:layout_constraintEnd_toStartOf="@+id/pollen"
-        app:layout_constraintHorizontal_bias="0.511"
-        app:layout_constraintStart_toEndOf="@+id/rain"
-        app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="@string/air_quality_image" />
-
-    <ImageView
-        android:id="@+id/pollen"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="512dp"
-        android:layout_marginEnd="52dp"
-        android:background="@drawable/pollen"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars"
-        android:contentDescription="@string/pollen_image" />
-
-    <TextView
-        android:id="@+id/rainChance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="24dp"
-        android:text="@string/rain"
-        android:textColor="#FFFFFF"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rain" />
-
-    <TextView
-        android:id="@+id/airQuality"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="@string/air_quality"
-        android:textColor="#FFF7F7"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/poll"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/rainChance"
-        app:layout_constraintTop_toBottomOf="@+id/air"
-        app:layout_constraintVertical_bias="0.015" />
-
-    <TextView
-        android:id="@+id/poll"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="317dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="52dp"
-        android:text="@string/pollen"
-        android:textColor="#FBFBFB"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pollen" />
-
-    <TextView
-        android:id="@+id/notification"
-        android:layout_width="96dp"
-        android:layout_height="21dp"
-
-        android:layout_marginBottom="268dp"
-        android:text="@string/setup_alerts"
-        android:textColor="#504D4D"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.514"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/notiBtn"
-        android:layout_width="112dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="388dp"
-        android:layout_marginBottom="295dp"
-        android:background="@drawable/ic_action_name"
-        android:textColorHint="#FBFBFB"
-        app:iconTint="#FFF9F9"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.518"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.903"
-        tools:ignore="SpeakableTextPresentCheck" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
