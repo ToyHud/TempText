@@ -19,7 +19,9 @@ import com.example.android.temptext.viewmodel.TempTextViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.CancellationTokenSource
+import kotlin.math.floor
 import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 
 /**
  * A simple [Fragment] subclass.
@@ -29,10 +31,13 @@ import kotlin.math.roundToInt
 private const val API_KEY = BuildConfig.WEATHER_API_KEY
 
 class MainWeatherFragment : Fragment() {
-    private lateinit var locationTextView: SearchView
+
     private lateinit var statusTextView: TextView
     private lateinit var degreeTextView: TextView
     private lateinit var alertsButton: Button
+    private lateinit var precipTextView: TextView
+    private lateinit var aqiTextView: TextView
+    private lateinit var humidTextView: TextView
     private val viewModel: TempTextViewModel by activityViewModels()
     private val cancellationTokenSource = CancellationTokenSource()
     /**
@@ -57,14 +62,40 @@ class MainWeatherFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         statusTextView = binding.weatherStatus
         degreeTextView = binding.currentTemp
+        alertsButton = binding.notiBtn
+        precipTextView  = binding.rainChance
+        aqiTextView = binding.airQuality
+        humidTextView = binding.humidity
     }
     private fun displayWeather() {
          viewModel.fahrenheit.observe(this, { _ ->
-             degreeTextView.text = viewModel.fahrenheit.value!!.roundToInt().toString()
+             degreeTextView.text = floor(viewModel.fahrenheit.value!!).toString()
          })
          viewModel.currentWeather.observe(this, {
              statusTextView.text = viewModel.currentWeather.value!!
          })
+        viewModel.aqi.observe(this,{
+            val airQuality = viewModel.aqi.value!!
+            if (airQuality <= 50 ) {
+                aqiTextView.text = resources.getString(R.string.good)
+            }else if (airQuality >= 51 || airQuality <= 100){
+                aqiTextView.text = resources.getString(R.string.moderate)
+            }else if (airQuality >= 101 || airQuality <= 150){
+                aqiTextView.text = resources.getString(R.string.unhealthy_sensitive)
+            }else if (airQuality >= 151 || airQuality <= 200){
+                aqiTextView.text = resources.getString(R.string.unhealthy)
+            }else if (airQuality >= 201 || airQuality <= 300){
+                aqiTextView.text = resources.getString(R.string.very_unhealthy)
+            }else if (airQuality >= 301){
+                aqiTextView.text = resources.getString(R.string.hazardous)
+            }
+        })
+        viewModel.humidity.observe(this, {
+            humidTextView.text = floor(viewModel.humidity.value!!).toString()
+        })
+        viewModel.precipitation.observe(this,{
+            precipTextView.text = floor(viewModel.precipitation.value!!).toString()
+        })
      }
     @SuppressLint("MissingPermission")
     fun getLastLocation() {

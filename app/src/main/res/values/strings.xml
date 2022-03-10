@@ -9,7 +9,7 @@
     <string name="air_quality_image">air quality image</string>
     <string name="rain_cloud_image">rain cloud image</string>
     <string name="pollen_image">pollen image</string>
-    <string name="pollen">Pollen:</string>
+    <string name="humidity">Humidity:</string>
     <string name="setup_alerts">SETUP ALERTS</string>
     <string name="rain">Rain:</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -25,5 +25,11 @@
     <string name="temp_select_severe">10ºF(Severe)</string>
     <string name="temp_select_low">20ºF</string>
     <string name="save">Save</string>
+    <string name="good">Good</string>
+    <string name ="moderate">Moderate</string>
+    <string name="unhealthy_sensitive">Unhealthy for Sensitive Groups</string>
+    <string name="unhealthy">Unhealthy</string>
+    <string name="very_unhealthy">Very Unhealthy</string>
+    <string name="hazardous">Hazardous</string>
 
 </resources>
