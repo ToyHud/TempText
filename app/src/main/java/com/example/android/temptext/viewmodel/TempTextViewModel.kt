@@ -15,7 +15,16 @@ class TempTextViewModel : ViewModel(){
     private var appAqi: String = "yes"
     private var appArea = "NY"
 
-    private val _city = MutableLiveData<String>()
+    private var _aqi = MutableLiveData<Float>()
+    val aqi: LiveData<Float> = _aqi
+
+    private var _precipitation = MutableLiveData<Float>()
+    val precipitation: LiveData<Float> = _precipitation
+
+    private var _humidity = MutableLiveData<Double>()
+    val humidity: LiveData<Double> = _humidity
+
+    private var _city = MutableLiveData<String>()
     val city: LiveData<String> = _city
 
     private var _state = MutableLiveData<String>()
@@ -35,9 +44,11 @@ class TempTextViewModel : ViewModel(){
         try {
             viewModelScope.launch {
                 _city.value = WeatherAlertApi.retrofitService.getCurrentWeather(apiKey, area, aqi).currentLocation?.city!!
-                //_state.value = WeatherAlertApi.retrofitService.getCurrentWeather(apiKey, area, aqi).currentLocation?.state!!
+                _precipitation.value = WeatherAlertApi.retrofitService.getCurrentWeather(apiKey, area, aqi).currentWeather?.precipitation!!
                 _currentWeather.value = WeatherAlertApi.retrofitService.getCurrentWeather(apiKey , area, aqi).currentWeather?.currentWeatherCondition!!.currentCondition!!
                 _fahrenheit.value = WeatherAlertApi.retrofitService.getCurrentWeather(apiKey, area, aqi).currentWeather?.fahrenheit!!
+                _humidity.value = WeatherAlertApi.retrofitService.getCurrentWeather(apiKey, area, aqi).currentWeather?.humidity!!
+                _aqi.value = WeatherAlertApi.retrofitService.getCurrentWeather(apiKey, area, aqi).currentWeather?.aqi?.ozone!!
             }
         }
         catch (e: Exception) {
