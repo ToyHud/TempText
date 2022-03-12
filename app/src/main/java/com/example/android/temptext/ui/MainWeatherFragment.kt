@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.android.temptext.BuildConfig
 import com.example.android.temptext.R
@@ -55,7 +56,6 @@ class MainWeatherFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         displayWeather()
-        onAlertClick()
         // Inflate the layout for this fragment
         _binding = FragmentMainWeatherBinding.inflate(inflater, container, false)
         return binding.root
@@ -69,6 +69,8 @@ class MainWeatherFragment : Fragment() {
         precipTextView = binding.rainChance
         aqiTextView = binding.airQuality
         humidTextView = binding.humidity
+
+        alertsButton.setOnClickListener { findNavController().navigate(R.id.action_mainWeatherFragment_to_setUpAlertFragment) }
     }
 
     private fun displayWeather() {
@@ -130,14 +132,6 @@ class MainWeatherFragment : Fragment() {
             fusedLocation.requestPermissions(this.requireActivity())
         } else {
             getLastLocation()
-        }
-    }
-
-    private fun onAlertClick() {
-        alertsButton.setOnClickListener {
-            val action =
-                MainWeatherFragmentDirections.action_mainWeatherFragment_to_setUpAlertFragment()
-            findNavController().navigate(action)
         }
     }
 }
