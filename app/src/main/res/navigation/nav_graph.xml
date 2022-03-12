@@ -3,16 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mainWeatherFragment2">
+    app:startDestination="@id/mainWeatherFragment">
 
 
     <fragment
-        android:id="@+id/mainWeatherFragment2"
+        android:id="@+id/mainWeatherFragment"
         android:name="com.example.android.temptext.ui.MainWeatherFragment"
         android:label="fragment_main_weather"
         tools:layout="@layout/fragment_main_weather" >
         <action
-            android:id="@+id/action_mainWeatherFragment2_to_setUpAlertFragment"
+            android:id="@+id/action_mainWeatherFragment_to_setUpAlertFragment"
             app:destination="@id/setUpAlertFragment" />
     </fragment>
     <fragment
@@ -21,7 +21,7 @@
         android:label="fragment_set_up_alert"
         tools:layout="@layout/fragment_set_up_alert" >
         <action
-            android:id="@+id/action_setUpAlertFragment_to_mainWeatherFragment2"
-            app:destination="@id/mainWeatherFragment2" />
+            android:id="@+id/action_setUpAlertFragment_to_mainWeatherFragment"
+            app:destination="@id/mainWeatherFragment" />
     </fragment>
 </navigation>
