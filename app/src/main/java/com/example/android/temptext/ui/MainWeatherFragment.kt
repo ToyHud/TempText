@@ -11,6 +11,8 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.android.temptext.BuildConfig
 import com.example.android.temptext.R
 import com.example.android.temptext.databinding.FragmentMainWeatherBinding
@@ -40,12 +42,13 @@ class MainWeatherFragment : Fragment() {
     private lateinit var humidTextView: TextView
     private val viewModel: TempTextViewModel by activityViewModels()
     private val cancellationTokenSource = CancellationTokenSource()
+
     /**
      * Provides the entry point to the Fused Location Provider API.
      * FusedLocationProviderClient - Main class for receiving location updates.
      */
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private var _binding : FragmentMainWeatherBinding? = null
+    private var _binding: FragmentMainWeatherBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -63,43 +66,48 @@ class MainWeatherFragment : Fragment() {
         statusTextView = binding.weatherStatus
         degreeTextView = binding.currentTemp
         alertsButton = binding.notiBtn
-        precipTextView  = binding.rainChance
+        precipTextView = binding.rainChance
         aqiTextView = binding.airQuality
         humidTextView = binding.humidity
+
+        alertsButton.setOnClickListener { findNavController().navigate(R.id.action_mainWeatherFragment_to_setUpAlertFragment) }
     }
+
     private fun displayWeather() {
-         viewModel.fahrenheit.observe(this, { _ ->
-             degreeTextView.text = floor(viewModel.fahrenheit.value!!).toString()
-         })
-         viewModel.currentWeather.observe(this, {
-             statusTextView.text = viewModel.currentWeather.value!!
-         })
-        viewModel.aqi.observe(this,{
+        viewModel.fahrenheit.observe(this, { _ ->
+            degreeTextView.text = floor(viewModel.fahrenheit.value!!).toString()
+        })
+        viewModel.currentWeather.observe(this, {
+            statusTextView.text = viewModel.currentWeather.value!!
+        })
+        viewModel.aqi.observe(this, {
             val airQuality = viewModel.aqi.value!!
-            if (airQuality <= 50 ) {
+            if (airQuality <= 50) {
                 aqiTextView.text = resources.getString(R.string.good)
-            }else if (airQuality >= 51 || airQuality <= 100){
+            } else if (airQuality >= 51 || airQuality <= 100) {
                 aqiTextView.text = resources.getString(R.string.moderate)
-            }else if (airQuality >= 101 || airQuality <= 150){
+            } else if (airQuality >= 101 || airQuality <= 150) {
                 aqiTextView.text = resources.getString(R.string.unhealthy_sensitive)
-            }else if (airQuality >= 151 || airQuality <= 200){
+            } else if (airQuality >= 151 || airQuality <= 200) {
                 aqiTextView.text = resources.getString(R.string.unhealthy)
-            }else if (airQuality >= 201 || airQuality <= 300){
+            } else if (airQuality >= 201 || airQuality <= 300) {
                 aqiTextView.text = resources.getString(R.string.very_unhealthy)
-            }else if (airQuality >= 301){
+            } else if (airQuality >= 301) {
                 aqiTextView.text = resources.getString(R.string.hazardous)
             }
         })
         viewModel.humidity.observe(this, {
             humidTextView.text = floor(viewModel.humidity.value!!).toString()
         })
-        viewModel.precipitation.observe(this,{
+        viewModel.precipitation.observe(this, {
             precipTextView.text = floor(viewModel.precipitation.value!!).toString()
         })
-     }
+    }
+
     @SuppressLint("MissingPermission")
     fun getLastLocation() {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this.requireActivity())
+        fusedLocationClient =
+            LocationServices.getFusedLocationProviderClient(this.requireActivity())
         fusedLocationClient.lastLocation
             .addOnCompleteListener { location ->
                 if (location.isSuccessful && location.result != null) {
@@ -113,6 +121,7 @@ class MainWeatherFragment : Fragment() {
                 cancellationTokenSource.cancel()
             }
     }
+
     override fun onStart() {
         super.onStart()
         /* *
