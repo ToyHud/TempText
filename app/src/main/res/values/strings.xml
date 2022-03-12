@@ -31,5 +31,6 @@
     <string name="unhealthy">Unhealthy</string>
     <string name="very_unhealthy">Very Unhealthy</string>
     <string name="hazardous">Hazardous</string>
+    <string name="new_york">New York</string>
 
 </resources>
