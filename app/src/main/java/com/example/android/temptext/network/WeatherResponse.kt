@@ -14,7 +14,8 @@ class NestedWeatherResponse (
     @Json(name = "condition") val currentWeatherCondition: WeatherConditions?,
     @Json(name = "precip_in") val precipitation: Float?,
     @Json(name = "humidity") val humidity: Double?,
-    @Json(name = "air_quality") val aqi: WeatherConditions?
+    @Json(name = "air_quality") val aqi: WeatherConditions?,
+    @Json(name = "wind_mph") val wind: Float?
 )
 
 class WeatherConditions (

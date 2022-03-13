@@ -8,7 +8,6 @@ import androidx.navigation.fragment.NavHostFragment
 import com.example.android.temptext.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var locationTextView: SearchView
     private lateinit var navController: NavController
     private lateinit var binding: ActivityMainBinding
 
@@ -20,8 +19,6 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_graph) as NavHostFragment
         navController = navHostFragment.navController
-
-        locationTextView = binding.searchView
     }
    override fun onSupportNavigateUp(): Boolean {
        return navController.navigateUp() || super.onSupportNavigateUp()

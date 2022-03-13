@@ -3,15 +3,14 @@ package com.example.android.temptext.ui
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.android.temptext.BuildConfig
 import com.example.android.temptext.R
@@ -21,14 +20,12 @@ import com.example.android.temptext.viewmodel.TempTextViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.CancellationTokenSource
+import com.google.android.material.snackbar.Snackbar
 import kotlin.math.floor
-import kotlin.math.roundToInt
-import kotlin.math.roundToLong
 
 /**
  * A simple [Fragment] subclass.
- * Use the [MainWeatherFragment.newInstance] factory method to
- * create an instance of this fragment.
+ * Used to implement methods for fragment_main_weather
  */
 private const val API_KEY = BuildConfig.WEATHER_API_KEY
 
@@ -39,7 +36,7 @@ class MainWeatherFragment : Fragment() {
     private lateinit var alertsButton: Button
     private lateinit var precipTextView: TextView
     private lateinit var aqiTextView: TextView
-    private lateinit var humidTextView: TextView
+    private lateinit var windTextView: TextView
     private val viewModel: TempTextViewModel by activityViewModels()
     private val cancellationTokenSource = CancellationTokenSource()
 
@@ -50,6 +47,7 @@ class MainWeatherFragment : Fragment() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var _binding: FragmentMainWeatherBinding? = null
     private val binding get() = _binding!!
+    private lateinit var locationTextView: SearchView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,13 +66,15 @@ class MainWeatherFragment : Fragment() {
         alertsButton = binding.notiBtn
         precipTextView = binding.rainChance
         aqiTextView = binding.airQuality
-        humidTextView = binding.humidity
+        windTextView = binding.wind
+        locationTextView = binding.searchView
 
         alertsButton.setOnClickListener { findNavController().navigate(R.id.action_mainWeatherFragment_to_setUpAlertFragment) }
+        locationTextView.setOnClickListener { Snackbar.make(view, "Location set!", Snackbar.LENGTH_SHORT).show() }
     }
 
     private fun displayWeather() {
-        viewModel.fahrenheit.observe(this, { _ ->
+        viewModel.fahrenheit.observe(this, {
             degreeTextView.text = floor(viewModel.fahrenheit.value!!).toString()
         })
         viewModel.currentWeather.observe(this, {
@@ -96,8 +96,8 @@ class MainWeatherFragment : Fragment() {
                 aqiTextView.text = resources.getString(R.string.hazardous)
             }
         })
-        viewModel.humidity.observe(this, {
-            humidTextView.text = floor(viewModel.humidity.value!!).toString()
+        viewModel.wind.observe(this, {
+            windTextView.text = floor(viewModel.wind.value!!).toString()
         })
         viewModel.precipitation.observe(this, {
             precipTextView.text = floor(viewModel.precipitation.value!!).toString()
@@ -121,7 +121,6 @@ class MainWeatherFragment : Fragment() {
                 cancellationTokenSource.cancel()
             }
     }
-
     override fun onStart() {
         super.onStart()
         /* *

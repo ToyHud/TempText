@@ -3,15 +3,13 @@
     <string name="app_name">TempText</string>
     <string name="weather_status">Weather</string>
     <string name="current_temp">39°F</string>
-    <string name="air_quality">Air quality:</string>
     <string name="mostly_cloudy">Mostly Cloudy</string>
     <string name="current_temp2">30º</string>
     <string name="air_quality_image">air quality image</string>
     <string name="rain_cloud_image">rain cloud image</string>
     <string name="pollen_image">pollen image</string>
-    <string name="humidity">Humidity:</string>
+    <string name="wind">Wind:</string>
     <string name="setup_alerts">SETUP ALERTS</string>
-    <string name="rain">Rain:</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="temp_alert">Alert me if temperature is...</string>
     <string name="above">Above:</string>
@@ -32,5 +30,9 @@
     <string name="very_unhealthy">Very Unhealthy</string>
     <string name="hazardous">Hazardous</string>
     <string name="new_york">New York</string>
+    <string name="alerts">Alerts</string>
+    <string name="rain">Rain:</string>
+    <string name="air_quality">Air quality:</string>
+    <string name="degree">°</string>
 
 </resources>

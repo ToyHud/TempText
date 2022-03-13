@@ -21,8 +21,8 @@ class TempTextViewModel : ViewModel(){
     private var _precipitation = MutableLiveData<Float>()
     val precipitation: LiveData<Float> = _precipitation
 
-    private var _humidity = MutableLiveData<Double>()
-    val humidity: LiveData<Double> = _humidity
+    private var _wind = MutableLiveData<Float>()
+    val wind: LiveData<Float> = _wind
 
     private var _city = MutableLiveData<String>()
     val city: LiveData<String> = _city
@@ -47,7 +47,7 @@ class TempTextViewModel : ViewModel(){
                 _precipitation.value = WeatherAlertApi.retrofitService.getCurrentWeather(apiKey, area, aqi).currentWeather?.precipitation!!
                 _currentWeather.value = WeatherAlertApi.retrofitService.getCurrentWeather(apiKey , area, aqi).currentWeather?.currentWeatherCondition!!.currentCondition!!
                 _fahrenheit.value = WeatherAlertApi.retrofitService.getCurrentWeather(apiKey, area, aqi).currentWeather?.fahrenheit!!
-                _humidity.value = WeatherAlertApi.retrofitService.getCurrentWeather(apiKey, area, aqi).currentWeather?.humidity!!
+                _wind.value = WeatherAlertApi.retrofitService.getCurrentWeather(apiKey, area, aqi).currentWeather?.wind!!
                 _aqi.value = WeatherAlertApi.retrofitService.getCurrentWeather(apiKey, area, aqi).currentWeather?.aqi?.ozone!!
             }
         }

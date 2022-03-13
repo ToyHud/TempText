@@ -109,17 +109,17 @@
             android:hint="@string/air_quality"
             android:textColor="#FFF7F7"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/humidity"
+            app:layout_constraintEnd_toStartOf="@+id/wind"
             app:layout_constraintHorizontal_bias="0.58"
             app:layout_constraintStart_toEndOf="@+id/rainChance" />
 
         <TextView
-            android:id="@+id/humidity"
+            android:id="@+id/wind"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="28dp"
             android:layout_marginBottom="108dp"
-            android:hint="@string/humidity"
+            android:hint="@string/wind"
             android:textColor="#FBFBFB"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -129,7 +129,7 @@
             android:layout_width="150dp"
             android:layout_height="60dp"
             android:backgroundTint="#ff0006"
-            android:text="Alerts"
+            android:text="@string/alerts"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -161,7 +161,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="56dp"
             android:layout_marginBottom="136dp"
-            android:text="Rain:"
+            android:text="@string/rain"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -170,7 +170,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="136dp"
-            android:text="Air quality:"
+            android:text="@string/air_quality"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/textView4"
             app:layout_constraintHorizontal_bias="0.592"
@@ -182,7 +182,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="52dp"
             android:layout_marginBottom="136dp"
-            android:text="Wind:"
+            android:text="@string/wind"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -194,7 +194,7 @@
             android:layout_marginTop="208dp"
             android:layout_marginEnd="117dp"
             android:fontFamily="sans-serif-thin"
-            android:text="°"
+            android:text="@string/degree"
             android:textSize="90sp"
             app:layout_constraintBottom_toTopOf="@+id/notiBtn"
             app:layout_constraintEnd_toEndOf="parent"
