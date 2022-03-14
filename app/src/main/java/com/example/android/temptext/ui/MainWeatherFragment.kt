@@ -3,6 +3,7 @@ package com.example.android.temptext.ui
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -74,6 +75,13 @@ class MainWeatherFragment : Fragment() {
     }
 
     private fun displayWeather() {
+        //create array of variables
+        //currentWeather = light snow
+        //precipitation = 0.0
+        //fahrenheit=30
+        //wind = 11.9
+        //iterate through array with for or when loop
+        //call displayweatherbase and pass variables to function
         viewModel.fahrenheit.observe(this, {
             degreeTextView.text = floor(viewModel.fahrenheit.value!!).toString()
         })
@@ -121,6 +129,7 @@ class MainWeatherFragment : Fragment() {
                 cancellationTokenSource.cancel()
             }
     }
+
     override fun onStart() {
         super.onStart()
         /* *
