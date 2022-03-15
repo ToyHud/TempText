@@ -3,7 +3,6 @@ package com.example.android.temptext.ui
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +16,7 @@ import com.example.android.temptext.BuildConfig
 import com.example.android.temptext.R
 import com.example.android.temptext.databinding.FragmentMainWeatherBinding
 import com.example.android.temptext.network.ForegroundOnlyLocationService
+import com.example.android.temptext.network.WeatherResponse
 import com.example.android.temptext.viewmodel.TempTextViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -71,25 +71,20 @@ class MainWeatherFragment : Fragment() {
         locationTextView = binding.searchView
 
         alertsButton.setOnClickListener { findNavController().navigate(R.id.action_mainWeatherFragment_to_setUpAlertFragment) }
-        locationTextView.setOnClickListener { Snackbar.make(view, "Location set!", Snackbar.LENGTH_SHORT).show() }
+        locationTextView.setOnClickListener {
+            Snackbar.make(
+                view,
+                "Location set!",
+                Snackbar.LENGTH_SHORT
+            ).show()
+        }
     }
 
     private fun displayWeather() {
-        //create array of variables
-        //currentWeather = light snow
-        //precipitation = 0.0
-        //fahrenheit=30
-        //wind = 11.9
-        //iterate through array with for or when loop
-        //call displayweatherbase and pass variables to function
-        viewModel.fahrenheit.observe(this, {
-            degreeTextView.text = floor(viewModel.fahrenheit.value!!).toString()
-        })
-        viewModel.currentWeather.observe(this, {
-            statusTextView.text = viewModel.currentWeather.value!!
-        })
-        viewModel.aqi.observe(this, {
-            val airQuality = viewModel.aqi.value!!
+        viewModel.apiResponse.observe(this, {
+            val responseArray = arrayListOf(it.currentLocation, it.currentWeather)
+            val currentWeather = it.currentWeather.currentWeatherCondition!!.currentCondition!!
+            val airQuality = it.currentWeather.aqi!!.ozone!!
             if (airQuality <= 50) {
                 aqiTextView.text = resources.getString(R.string.good)
             } else if (airQuality >= 51 || airQuality <= 100) {
@@ -103,12 +98,13 @@ class MainWeatherFragment : Fragment() {
             } else if (airQuality >= 301) {
                 aqiTextView.text = resources.getString(R.string.hazardous)
             }
-        })
-        viewModel.wind.observe(this, {
-            windTextView.text = floor(viewModel.wind.value!!).toString()
-        })
-        viewModel.precipitation.observe(this, {
-            precipTextView.text = floor(viewModel.precipitation.value!!).toString()
+
+            for (response in responseArray) {
+                degreeTextView.text = response.fahrenheit.toString()
+                precipTextView.text = response.precipitation.toString()
+                windTextView.text = response.wind.toString()
+                statusTextView.text = currentWeather
+            }
         })
     }
 
@@ -122,7 +118,7 @@ class MainWeatherFragment : Fragment() {
                     val latitude = location.result.latitude
                     val longitude = location.result.longitude
                     val currentLocation = "$latitude,$longitude"
-                    viewModel.showCurrentWeather(API_KEY, currentLocation, "yes")
+                    viewModel.showCurrentWeather(API_KEY, currentLocation)
                 } else {
                     Log.d("ForeGroundError", "getLastLocation:exception", location.exception)
                 }

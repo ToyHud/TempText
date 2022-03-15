@@ -31,7 +31,7 @@ interface WeatherApiService {
     ///alerts/active/area/{area}"
     @GET("current.json?")
     //change query back to LiveData<String>
-    suspend fun getCurrentWeather(@Query("key") key:String? = null, @Query("q") query: String, @Query("aqi") aqi: String? = null): WeatherResponse
+    suspend fun getCurrentWeather(@Query("key") key:String, @Query("q") query: String, @Query("aqi") aqi: String = "yes"): WeatherResponse
 
 }
 
