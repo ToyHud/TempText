@@ -24,7 +24,7 @@
     <string name="temp_select_low">20ºF</string>
     <string name="save">Save</string>
     <string name="good">Good</string>
-    <string name ="moderate">Moderate</string>
+    <string name="moderate">Moderate</string>
     <string name="unhealthy_sensitive">Unhealthy for Sensitive Groups</string>
     <string name="unhealthy">Unhealthy</string>
     <string name="very_unhealthy">Very Unhealthy</string>

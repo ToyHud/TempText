@@ -16,13 +16,10 @@ import com.example.android.temptext.BuildConfig
 import com.example.android.temptext.R
 import com.example.android.temptext.databinding.FragmentMainWeatherBinding
 import com.example.android.temptext.network.ForegroundOnlyLocationService
-import com.example.android.temptext.network.WeatherResponse
 import com.example.android.temptext.viewmodel.TempTextViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.CancellationTokenSource
-import com.google.android.material.snackbar.Snackbar
-import kotlin.math.floor
 
 /**
  * A simple [Fragment] subclass.
@@ -40,7 +37,7 @@ class MainWeatherFragment : Fragment() {
     private lateinit var windTextView: TextView
     private val viewModel: TempTextViewModel by activityViewModels()
     private val cancellationTokenSource = CancellationTokenSource()
-
+    private lateinit var cityTextView: TextView
     /**
      * Provides the entry point to the Fused Location Provider API.
      * FusedLocationProviderClient - Main class for receiving location updates.
@@ -54,12 +51,12 @@ class MainWeatherFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         displayWeather()
         // Inflate the layout for this fragment
         _binding = FragmentMainWeatherBinding.inflate(inflater, container, false)
         return binding.root
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         statusTextView = binding.weatherStatus
@@ -69,21 +66,28 @@ class MainWeatherFragment : Fragment() {
         aqiTextView = binding.airQuality
         windTextView = binding.wind
         locationTextView = binding.searchView
+        cityTextView = binding.cityView
 
         alertsButton.setOnClickListener { findNavController().navigate(R.id.action_mainWeatherFragment_to_setUpAlertFragment) }
-        locationTextView.setOnClickListener {
-            Snackbar.make(
-                view,
-                "Location set!",
-                Snackbar.LENGTH_SHORT
-            ).show()
-        }
+
+        locationTextView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                locationTextView.clearFocus()
+                viewModel.showCurrentWeather(API_KEY, query, "yes")
+                return true
+            }
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+        })
     }
 
     private fun displayWeather() {
         viewModel.apiResponse.observe(this, {
             val responseArray = arrayListOf(it.currentLocation, it.currentWeather)
             val currentWeather = it.currentWeather.currentWeatherCondition!!.currentCondition!!
+            val city = it.currentLocation.city!!
+
             val airQuality = it.currentWeather.aqi!!.ozone!!
             if (airQuality <= 50) {
                 aqiTextView.text = resources.getString(R.string.good)
@@ -98,16 +102,15 @@ class MainWeatherFragment : Fragment() {
             } else if (airQuality >= 301) {
                 aqiTextView.text = resources.getString(R.string.hazardous)
             }
-
             for (response in responseArray) {
                 degreeTextView.text = response.fahrenheit.toString()
                 precipTextView.text = response.precipitation.toString()
                 windTextView.text = response.wind.toString()
                 statusTextView.text = currentWeather
+                cityTextView.text = city
             }
         })
     }
-
     @SuppressLint("MissingPermission")
     fun getLastLocation() {
         fusedLocationClient =
@@ -117,15 +120,18 @@ class MainWeatherFragment : Fragment() {
                 if (location.isSuccessful && location.result != null) {
                     val latitude = location.result.latitude
                     val longitude = location.result.longitude
-                    val currentLocation = "$latitude,$longitude"
-                    viewModel.showCurrentWeather(API_KEY, currentLocation)
+                    val currentLocation = "$latitude , $longitude"
+                    viewModel.showCurrentWeather(API_KEY, currentLocation, "yes")
                 } else {
-                    Log.d("ForeGroundError", "getLastLocation:exception", location.exception)
+                    Log.d(
+                        "ForeGroundError",
+                        "getLastLocation:exception",
+                        location.exception
+                    )
+                    cancellationTokenSource.cancel()
                 }
-                cancellationTokenSource.cancel()
             }
     }
-
     override fun onStart() {
         super.onStart()
         /* *

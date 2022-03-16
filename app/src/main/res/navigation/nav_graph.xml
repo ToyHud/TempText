@@ -5,7 +5,6 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/mainWeatherFragment">
 
-
     <fragment
         android:id="@+id/mainWeatherFragment"
         android:name="com.example.android.temptext.ui.MainWeatherFragment"
