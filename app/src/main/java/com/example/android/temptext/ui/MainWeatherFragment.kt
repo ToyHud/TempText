@@ -87,8 +87,8 @@ class MainWeatherFragment : Fragment() {
             val responseArray = arrayListOf(it.currentLocation, it.currentWeather)
             val currentWeather = it.currentWeather.currentWeatherCondition!!.currentCondition!!
             val city = it.currentLocation.city!!
-
             val airQuality = it.currentWeather.aqi!!.ozone!!
+
             if (airQuality <= 50) {
                 aqiTextView.text = resources.getString(R.string.good)
             } else if (airQuality >= 51 || airQuality <= 100) {
