@@ -1,21 +1,22 @@
 package com.example.temptext.database
 
 import androidx.lifecycle.LiveData
+import androidx.room.*
 
-
+@Dao
 interface WeatherDao {
-    @Query("SELECT * FROM WeatherImages")
-    fun getAll():LiveData<List<WeatherImages>>
+    @Query("SELECT * FROM userinfo ORDER BY id DESC")
+     fun getAllUserInfo():List<WeatherModel>
 
-    @Query("SELECT * FROM WeatherImages ORDER BY id DESC LIMIT 1")
-    fun getMostRecentlyAddWeather (): WeatherImage
 
-    @Query ( "DELETE from WeatherImages where id = (select max (id)-1 from WeatherImages)")
-    suspend fun deleteWeather()
+     @Insert
+     fun insertUser(user: WeatherModel?)
 
-    @Insert
-    suspend fun addWeatherImage (weatherImageEntity: WeatherImage)
+     @Delete
+     fun deleteUser(user:WeatherModel?)
 
-    @Delete
-    void delete (User user);
+     @Update
+     fun updateUser (user: WeatherModel?)
+
+
 }

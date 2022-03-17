@@ -1,33 +1,35 @@
 package com.example.temptext.database
 
 import android.content.Context
+import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-abstract class WeatherDatabase: RoomDatabase() {
-     abstract fun weatherDao(): WeatherDao
+@Database(entities = [WeatherModel::class], version =1)
+      abstract class WeatherDatabase: RoomDatabase(){
+
+    abstract fun weatherDao():WeatherDao?
 
 
      companion object{
          @Volatile
          private var INSTANCE : WeatherDatabase? = null
 
-         fun getInstance (context: Context):WeatherDatabase{
+         fun getWeatherDatabase(context: Context):WeatherDatabase?{
 
-             var instance = INSTANCE
 
-             if (instance == null){
-                 instance = Room.databaseBuilder(
-                     context,//.applicationContext,
-                 WeatherDatabase::class.java,
-                     "weather_database"
+
+             if (INSTANCE == null){
+                 INSTANCE = Room.databaseBuilder<WeatherDatabase>(
+                     context.applicationContext, WeatherDatabase::class.java,
+                     "WeatherDatabase"
                  )
-                     .fallbackToDestructiveMigration()
+                     .allowMainThreadQueries()
                      .build()
 
-                 INSTANCE = instance
+
              }
-                return INSTANCE as WeatherDatabase
+                return INSTANCE
 
          }
      }
