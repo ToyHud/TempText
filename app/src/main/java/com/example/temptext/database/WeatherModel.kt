@@ -1,11 +1,15 @@
 package com.example.temptext.database
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-@Entity (tableName = "WeatherImages")
+
+@Entity(tableName = "WeatherImages")
 data class WeatherImageEntity(
     @PrimaryKey(autoGenerate = true)
     @Transient
-    @ColumnInfo (name = "id")
+    @ColumnInfo(name = "id")
     val id : Int? = null,
 
     @Json (name = "message")
@@ -13,8 +17,8 @@ data class WeatherImageEntity(
      val message : String
 
 
-     @Json ( name = "status")@
+     @Json ( name = "status")
       @ColumnInfo (name = "status")
-       val statusResponse : String,
+       val statusResponse : String
 
 )
