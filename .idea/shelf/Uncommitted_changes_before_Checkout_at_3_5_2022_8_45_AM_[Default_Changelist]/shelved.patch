@@ -1,0 +1,101 @@
+Index: app/src/main/java/com/example/android/temptext/MainActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.android.temptext\r\n\r\nimport android.Manifest\r\nimport android.Manifest.permission.ACCESS_COARSE_LOCATION\r\nimport android.annotation.SuppressLint\r\nimport android.content.pm.PackageManager.PERMISSION_GRANTED\r\nimport android.os.Bundle\r\nimport android.util.Log\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport androidx.core.app.ActivityCompat\r\nimport androidx.lifecycle.MutableLiveData\r\nimport androidx.lifecycle.lifecycleScope\r\nimport com.example.android.temptext.network.WeatherAlertApi\r\nimport kotlinx.coroutines.launch\r\nimport com.example.android.temptext.network.FusedLocation\r\nimport com.google.android.gms.location.FusedLocationProviderClient\r\nimport com.google.android.gms.location.LocationServices\r\nimport com.google.android.gms.tasks.CancellationTokenSource\r\n\r\nprivate const val API_KEY = BuildConfig.WEATHER_API_KEY\r\n\r\nclass MainActivity : AppCompatActivity() {\r\n    /**\r\n     * Provides the entry point to the Fused Location Provider API.\r\n     */\r\n    private lateinit var fusedLocationClient: FusedLocationProviderClient\r\n\r\n\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        setContentView(R.layout.activity_main)\r\n\r\n        /*\r\n         * Instantiates Fused Location Provider\r\n         */\r\n        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)\r\n\r\n        val city = MutableLiveData<String>()\r\n        val state = MutableLiveData<String>()\r\n        val currentWeather = MutableLiveData<String>()\r\n        val celsius = MutableLiveData<Float>()\r\n        val fahrenheit = MutableLiveData<Float>()\r\n        val humidity = MutableLiveData<String>()\r\n        val dayOfWeek = MutableLiveData<Int>()\r\n        val windMph = MutableLiveData<Float>()\r\n        val precipitation = MutableLiveData<Float>()\r\n        val carbonMonoxide = MutableLiveData<Float>()\r\n\r\n        try {\r\n            lifecycleScope.launch {\r\n                city.value = WeatherAlertApi.retrofitService.getCurrentWeather(API_KEY,\"NY\",\"no\").currentLocation?.city!!\r\n                state.value = WeatherAlertApi.retrofitService.getCurrentWeather(API_KEY,\"NY\",\"no\").currentLocation?.state!!\r\n                currentWeather.value = WeatherAlertApi.retrofitService.getCurrentWeather(API_KEY,\"NY\",\"no\").currentWeather?.currentWeatherCondition?.currentCondition!!\r\n                celsius.value = WeatherAlertApi.retrofitService.getCurrentWeather(API_KEY,\"NY\",\"no\").currentWeather?.celsius!!\r\n                fahrenheit.value = WeatherAlertApi.retrofitService.getCurrentWeather(API_KEY,\"NY\",\"no\").currentWeather?.fahrenheit!!\r\n                city.value = WeatherAlertApi.retrofitService.getCurrentWeather(API_KEY,\"NY\", \"yes\").currentLocation?.city!!\r\n                state.value = WeatherAlertApi.retrofitService.getCurrentWeather(API_KEY,\"NY\", \"yes\").currentLocation?.state!!\r\n                currentWeather.value = WeatherAlertApi.retrofitService.getCurrentWeather(API_KEY,\"NY\", \"yes\").currentWeather?.currentWeatherCondition?.currentCondition!!\r\n                celsius.value = WeatherAlertApi.retrofitService.getCurrentWeather(API_KEY,\"NY\", \"yes\").currentWeather?.celsius!!\r\n                fahrenheit.value = WeatherAlertApi.retrofitService.getCurrentWeather(API_KEY,\"NY\", \"yes\").currentWeather?.fahrenheit!!\r\n                humidity.value = WeatherAlertApi.retrofitService.getCurrentWeather(API_KEY,\"NY\", \"yes\").currentWeather?.humidity!!\r\n                dayOfWeek.value = WeatherAlertApi.retrofitService.getCurrentWeather(API_KEY,\"NY\", \"yes\").currentWeather?.dayOfWeek!!\r\n                windMph.value = WeatherAlertApi.retrofitService.getCurrentWeather(API_KEY,\"NY\", \"yes\").currentWeather?.windMph!!\r\n                precipitation.value = WeatherAlertApi.retrofitService.getCurrentWeather(API_KEY,\"NY\", \"yes\").currentWeather?.precipitation!!\r\n                carbonMonoxide.value = WeatherAlertApi.retrofitService.getCurrentWeather(API_KEY,\"NY\", \"yes\").currentWeather?.aqi?.carbonMonoxide!!\r\n\r\n                Log.d(\"MainActivityCity\",city.value.toString())\r\n                Log.d(\"MainActivityRegion\",state.value.toString())\r\n                Log.d(\"MainActivityWeather\", currentWeather.value.toString())\r\n                Log.d(\"MainActivityCel\", celsius.value.toString())\r\n                Log.d(\"MainActivityFahr\", fahrenheit.value.toString())\r\n                Log.d(\"MainActivityHumid\", humidity.value.toString())\r\n                Log.d(\"MainActivityCO\", carbonMonoxide.value.toString())\r\n            }\r\n        } catch (e: Exception) {\r\n            \"Failure: ${e.message}\"\r\n        }\r\n    }\r\n\r\n    override fun onStart() {\r\n        super.onStart()\r\n        /* *\r\n         * Check permissions when activity starts\r\n         * */\r\n\r\n        val fusedLocation = FusedLocation()\r\n        if (!fusedLocation.checkPermissions()) {\r\n            fusedLocation.requestPermissions()\r\n        } else {\r\n            fusedLocation.getLastLocation()\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/android/temptext/MainActivity.kt b/app/src/main/java/com/example/android/temptext/MainActivity.kt
+--- a/app/src/main/java/com/example/android/temptext/MainActivity.kt	
++++ b/app/src/main/java/com/example/android/temptext/MainActivity.kt	
+@@ -1,40 +1,24 @@
+ package com.example.android.temptext
+ 
+-import android.Manifest
+-import android.Manifest.permission.ACCESS_COARSE_LOCATION
+-import android.annotation.SuppressLint
+-import android.content.pm.PackageManager.PERMISSION_GRANTED
+ import android.os.Bundle
+ import android.util.Log
+ import androidx.appcompat.app.AppCompatActivity
+-import androidx.core.app.ActivityCompat
+ import androidx.lifecycle.MutableLiveData
+ import androidx.lifecycle.lifecycleScope
++import com.example.android.temptext.network.FusedLocation
+ import com.example.android.temptext.network.WeatherAlertApi
+ import kotlinx.coroutines.launch
+-import com.example.android.temptext.network.FusedLocation
+-import com.google.android.gms.location.FusedLocationProviderClient
+-import com.google.android.gms.location.LocationServices
+-import com.google.android.gms.tasks.CancellationTokenSource
+ 
+ private const val API_KEY = BuildConfig.WEATHER_API_KEY
+ 
+ class MainActivity : AppCompatActivity() {
+-    /**
+-     * Provides the entry point to the Fused Location Provider API.
+-     */
+-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+ 
++    private val TAG = "MainActivity"
+ 
+     override fun onCreate(savedInstanceState: Bundle?) {
+         super.onCreate(savedInstanceState)
+         setContentView(R.layout.activity_main)
+ 
+-        /*
+-         * Instantiates Fused Location Provider
+-         */
+-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+-
+         val city = MutableLiveData<String>()
+         val state = MutableLiveData<String>()
+         val currentWeather = MutableLiveData<String>()
+@@ -62,7 +46,7 @@
+                 dayOfWeek.value = WeatherAlertApi.retrofitService.getCurrentWeather(API_KEY,"NY", "yes").currentWeather?.dayOfWeek!!
+                 windMph.value = WeatherAlertApi.retrofitService.getCurrentWeather(API_KEY,"NY", "yes").currentWeather?.windMph!!
+                 precipitation.value = WeatherAlertApi.retrofitService.getCurrentWeather(API_KEY,"NY", "yes").currentWeather?.precipitation!!
+-                carbonMonoxide.value = WeatherAlertApi.retrofitService.getCurrentWeather(API_KEY,"NY", "yes").currentWeather?.aqi?.carbonMonoxide!!
++               // carbonMonoxide.value = WeatherAlertApi.retrofitService.getCurrentWeather(API_KEY,"NY", "yes").currentWeather?.aqi?.carbonMonoxide!!
+ 
+                 Log.d("MainActivityCity",city.value.toString())
+                 Log.d("MainActivityRegion",state.value.toString())
+@@ -82,12 +66,11 @@
+         /* *
+          * Check permissions when activity starts
+          * */
+-
+         val fusedLocation = FusedLocation()
+-        if (!fusedLocation.checkPermissions()) {
+-            fusedLocation.requestPermissions()
++        if (!fusedLocation.checkPermissions(this)) {
++           fusedLocation.requestPermissions(this)
+         } else {
+-            fusedLocation.getLastLocation()
++            fusedLocation.getLastLocation(this)
+         }
+     }
+ }
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_11\" default=\"true\" project-jdk-name=\"11\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/build/classes\" />\r\n  </component>\r\n  <component name=\"ProjectType\">\r\n    <option name=\"id\" value=\"Android\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	
++++ b/.idea/misc.xml	
+@@ -1,5 +1,12 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
++  <component name="DesignSurface">
++    <option name="filePathToZoomLevelMap">
++      <map>
++        <entry key="..\:/Users/ayana/AndroidStudioProjects/TempTextFull/app/src/main/res/layout/activity_main.xml" value="0.1" />
++      </map>
++    </option>
++  </component>
+   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+     <output url="file://$PROJECT_DIR$/build/classes" />
+   </component>

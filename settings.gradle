@@ -3,8 +3,10 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        jcenter() // Warning: this repository is going to shut down soon
+        //jcenter() Warning: this repository is going to shut down soon  mavenCentral() has
+        //the same repositories as jcenter so it can be removed
     }
 }
+
 rootProject.name = "TempText"
 include ':app'
