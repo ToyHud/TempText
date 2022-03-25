@@ -1,12 +1,9 @@
 package com.example.android.temptext.database
 
 
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
-import com.example.temptext.database.WeatherModel
+import androidx.room.*
 
+@Dao
 interface WeatherDao {
 
     @Query("SELECT * FROM userinfo ORDER BY id DESC")
@@ -17,7 +14,7 @@ interface WeatherDao {
      fun insertUser(user: WeatherModel?)
 
      @Delete
-     fun deleteUser(user:WeatherModel?)
+     fun deleteUser(user: WeatherModel?)
 
 
      @Update

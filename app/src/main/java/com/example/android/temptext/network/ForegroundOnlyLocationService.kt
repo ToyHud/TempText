@@ -1,15 +1,25 @@
 package com.example.android.temptext.network
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Binder
 import android.os.IBinder
+import android.os.Looper
+import android.provider.ContactsContract.Directory.PACKAGE_NAME
 import android.util.Log
 import androidx.core.app.ActivityCompat
+import com.example.android.temptext.BuildConfig
+import com.example.android.temptext.MainActivity
+import com.google.android.gms.location.*
+import com.google.android.gms.tasks.CancellationTokenSource
+import java.util.concurrent.TimeUnit
 
 class ForegroundOnlyLocationService : Service() {
     /*
@@ -19,9 +29,96 @@ class ForegroundOnlyLocationService : Service() {
     private var configurationChange = false
     private var serviceRunningInForeground = false
     private val localBinder = LocalBinder()
-
+    private lateinit var locationRequest: LocationRequest
+    private lateinit var locationCallback: LocationCallback
+    private var currentLocation: Location? = null
+    private lateinit var notificationManager: NotificationManager
     private val REQUEST_PERMISSIONS_REQUEST_CODE = 34
-    private val TAG = "MainActivity"
+    private val TAG = "ForegroundLocation"
+    /**
+     * Provides the entry point to the Fused Location Provider API.
+     * FusedLocationProviderClient - Main class for receiving location updates
+     */
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private val cancellationTokenSource = CancellationTokenSource()
+
+    override fun onCreate() {
+        super.onCreate()
+        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        fusedLocationClient =
+            LocationServices.getFusedLocationProviderClient(this)
+        //create location request
+        locationRequest = LocationRequest.create().apply {
+            // Sets the desired interval for active location updates.
+            interval = TimeUnit.SECONDS.toMillis(60)
+            // Sets the fastest rate for active location updates.
+            fastestInterval = TimeUnit.SECONDS.toMillis(30)
+            // Sets the maximum time when batched location updates are delivered.
+            maxWaitTime = TimeUnit.MINUTES.toMillis(2)
+
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        }
+        /*Initialize the LocationCallback. callback that fusedLocationProvider will call when
+        * new location update is available
+        */
+        locationCallback = object : LocationCallback(){
+            override fun onLocationResult(locationResult: LocationResult) {
+                super.onLocationResult(locationResult)
+               /* Normally, you want to save a new location to a database. simplifying
+                things a bit and just saving it as a local variable, as we only need it again
+                if a Notification is created (when the user navigates away from app).*/
+                //get the latest location and save to database
+                currentLocation = locationResult.lastLocation
+                val intent = Intent()
+                /* Notify our Activity that a new location was added either using local broadcast
+                 * or service running as forground service
+                 */
+                if (serviceRunningInForeground){
+                    notificationManager.notify(NOTIFICATION_ID,
+                    MainActivity().generateNotification(currentLocation))
+                }
+            }
+        }
+    }
+    fun subscribeToLocationUpdates() {
+        Log.d(TAG, "subscribeToLocationUpdates()")
+
+        SharedPreferenceUtil.saveLocationTrackingPref(this, true)
+
+        // Binding to this service doesn't actually trigger onStartCommand(). That is needed to
+        // ensure this Service can be promoted to a foreground service, i.e., the service needs to
+        // be officially started (which we do here).
+        startService(Intent(applicationContext, ForegroundOnlyLocationService::class.java))
+
+        try {
+            fusedLocationClient.requestLocationUpdates(
+                locationRequest, locationCallback, Looper.getMainLooper())
+        } catch (unlikely: SecurityException) {
+            SharedPreferenceUtil.saveLocationTrackingPref(this, false)
+            Log.e(TAG, "Lost location permissions. Couldn't remove updates. $unlikely")
+        }
+    }
+    fun unsubscribeToLocationUpdates() {
+        Log.d(TAG, "unsubscribeToLocationUpdates()")
+        try {
+            // TODO: Step 1.6, Unsubscribe to location changes.
+            val removeTask= fusedLocationClient.removeLocationUpdates(locationCallback)
+            removeTask.addOnCompleteListener{task ->
+                if (task.isSuccessful){
+                    Log.d(TAG, "Location Callback removed")
+                    stopSelf()
+                }else {
+                    Log.d(TAG, "Failed to Remove Callback")
+                }
+            }
+            SharedPreferenceUtil.saveLocationTrackingPref(this, false)
+
+        } catch (unlikely: SecurityException) {
+            SharedPreferenceUtil.saveLocationTrackingPref(this, true)
+            Log.e(TAG, "Lost location permissions. Couldn't remove updates. $unlikely")
+        }
+    }
+   //TODO: https://codelabs.developers.google.com/codelabs/while-in-use-location#1
     /**
      * Return the current state of the permissions needed.
      */
@@ -31,12 +128,36 @@ class ForegroundOnlyLocationService : Service() {
             Manifest.permission.ACCESS_COARSE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
 
-    private fun startLocationPermissionRequest(activity: Activity) {
+    fun startLocationPermissionRequest(activity: Activity) {
         ActivityCompat.requestPermissions(
             activity, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
             REQUEST_PERMISSIONS_REQUEST_CODE
         )
     }
+    //sets location data pulled from fused location provider as parameter for api url
+    @SuppressLint("MissingPermission")
+    fun getLastLocation(activity: Activity) {
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
+        fusedLocationClient.lastLocation
+            .addOnCompleteListener { location ->
+                Log.d("ForegroundLocate1", "$location")
+                Log.d("ForegroundLocateResult", "${location.result}")
+                if (location.isSuccessful && location.result != null) {
+                    val latitude = location.result.latitude
+                    val longitude = location.result.longitude
+                    val currentLocation = """$latitude,$longitude"""
+                    Log.d("MainLocate", currentLocation)
+                } else {
+                    Log.d(
+                        "ForeGroundError",
+                        "getLastLocation:exception",
+                        location.exception
+                    )
+                    cancellationTokenSource.cancel()
+                }
+            }
+    }
+
     fun requestPermissions(activity: Activity) {
         if (ActivityCompat.shouldShowRequestPermissionRationale(
                 activity,
@@ -66,14 +187,20 @@ class ForegroundOnlyLocationService : Service() {
         configurationChange = false
         return localBinder
     }
+
     /**
      * Class used for the client Binder.  Since this service runs in the same process as its
      * clients, we don't need to deal with IPC.
      */
     inner class LocalBinder : Binder() {
+        internal val service: ForegroundOnlyLocationService
+            get() = this@ForegroundOnlyLocationService
     }
 
     companion object {
-
+        private const val NOTIFICATION_ID = 12345678
+        const val NOTIFICATION_CHANNEL_ID = "while_in_use_channel_01"
+        internal const val EXTRA_LOCATION = "$PACKAGE_NAME.extra.LOCATION"
+        const val API_KEY = BuildConfig.WEATHER_API_KEY
     }
 }

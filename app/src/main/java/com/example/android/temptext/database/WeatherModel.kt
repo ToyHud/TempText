@@ -1,4 +1,4 @@
-package com.example.temptext.database
+package com.example.android.temptext.database
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
