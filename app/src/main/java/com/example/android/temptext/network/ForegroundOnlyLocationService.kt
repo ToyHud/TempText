@@ -1,7 +1,6 @@
 package com.example.android.temptext.network
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.NotificationManager
 import android.app.Service
@@ -18,7 +17,6 @@ import androidx.core.app.ActivityCompat
 import com.example.android.temptext.BuildConfig
 import com.example.android.temptext.MainActivity
 import com.google.android.gms.location.*
-import com.google.android.gms.tasks.CancellationTokenSource
 import java.util.concurrent.TimeUnit
 
 class ForegroundOnlyLocationService : Service() {
@@ -35,12 +33,13 @@ class ForegroundOnlyLocationService : Service() {
     private lateinit var notificationManager: NotificationManager
     private val REQUEST_PERMISSIONS_REQUEST_CODE = 34
     private val TAG = "ForegroundLocation"
+
     /**
      * Provides the entry point to the Fused Location Provider API.
      * FusedLocationProviderClient - Main class for receiving location updates
      */
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private val cancellationTokenSource = CancellationTokenSource()
+   private lateinit var fusedLocationClient: FusedLocationProviderClient
+ /*    private val cancellationTokenSource = CancellationTokenSource()*/
 
     override fun onCreate() {
         super.onCreate()
@@ -61,25 +60,28 @@ class ForegroundOnlyLocationService : Service() {
         /*Initialize the LocationCallback. callback that fusedLocationProvider will call when
         * new location update is available
         */
-        locationCallback = object : LocationCallback(){
+        locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 super.onLocationResult(locationResult)
-               /* Normally, you want to save a new location to a database. simplifying
-                things a bit and just saving it as a local variable, as we only need it again
-                if a Notification is created (when the user navigates away from app).*/
+                /* Normally, you want to save a new location to a database. simplifying
+                 things a bit and just saving it as a local variable, as we only need it again
+                 if a Notification is created (when the user navigates away from app).*/
                 //get the latest location and save to database
                 currentLocation = locationResult.lastLocation
                 val intent = Intent()
                 /* Notify our Activity that a new location was added either using local broadcast
                  * or service running as forground service
                  */
-                if (serviceRunningInForeground){
-                    notificationManager.notify(NOTIFICATION_ID,
-                    MainActivity().generateNotification(currentLocation))
+                if (serviceRunningInForeground) {
+                    notificationManager.notify(
+                        NOTIFICATION_ID,
+                        MainActivity().generateNotification(currentLocation)
+                    )
                 }
             }
         }
     }
+
     fun subscribeToLocationUpdates() {
         Log.d(TAG, "subscribeToLocationUpdates()")
 
@@ -92,22 +94,24 @@ class ForegroundOnlyLocationService : Service() {
 
         try {
             fusedLocationClient.requestLocationUpdates(
-                locationRequest, locationCallback, Looper.getMainLooper())
+                locationRequest, locationCallback, Looper.getMainLooper()
+            )
         } catch (unlikely: SecurityException) {
             SharedPreferenceUtil.saveLocationTrackingPref(this, false)
             Log.e(TAG, "Lost location permissions. Couldn't remove updates. $unlikely")
         }
     }
+
     fun unsubscribeToLocationUpdates() {
         Log.d(TAG, "unsubscribeToLocationUpdates()")
         try {
-            // TODO: Step 1.6, Unsubscribe to location changes.
-            val removeTask= fusedLocationClient.removeLocationUpdates(locationCallback)
-            removeTask.addOnCompleteListener{task ->
-                if (task.isSuccessful){
+            //unsubscribe from location callback
+            val removeTask = fusedLocationClient.removeLocationUpdates(locationCallback)
+            removeTask.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
                     Log.d(TAG, "Location Callback removed")
                     stopSelf()
-                }else {
+                } else {
                     Log.d(TAG, "Failed to Remove Callback")
                 }
             }
@@ -118,7 +122,7 @@ class ForegroundOnlyLocationService : Service() {
             Log.e(TAG, "Lost location permissions. Couldn't remove updates. $unlikely")
         }
     }
-   //TODO: https://codelabs.developers.google.com/codelabs/while-in-use-location#1
+
     /**
      * Return the current state of the permissions needed.
      */
@@ -134,7 +138,8 @@ class ForegroundOnlyLocationService : Service() {
             REQUEST_PERMISSIONS_REQUEST_CODE
         )
     }
-    //sets location data pulled from fused location provider as parameter for api url
+
+/*    //sets location data pulled from fused location provider as parameter for api url
     @SuppressLint("MissingPermission")
     fun getLastLocation(activity: Activity) {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
@@ -146,8 +151,10 @@ class ForegroundOnlyLocationService : Service() {
                     val latitude = location.result.latitude
                     val longitude = location.result.longitude
                     val currentLocation = """$latitude,$longitude"""
+                    TempTextViewModel().showCurrentWeather(API_KEY, currentLocation, "yes")
                     Log.d("MainLocate", currentLocation)
                 } else {
+                    MainWeatherFragment().requestForegroundPermissions()
                     Log.d(
                         "ForeGroundError",
                         "getLastLocation:exception",
@@ -156,7 +163,7 @@ class ForegroundOnlyLocationService : Service() {
                     cancellationTokenSource.cancel()
                 }
             }
-    }
+    }*/
 
     fun requestPermissions(activity: Activity) {
         if (ActivityCompat.shouldShowRequestPermissionRationale(
@@ -199,8 +206,10 @@ class ForegroundOnlyLocationService : Service() {
 
     companion object {
         private const val NOTIFICATION_ID = 12345678
-        const val NOTIFICATION_CHANNEL_ID = "while_in_use_channel_01"
+        internal const val NOTIFICATION_CHANNEL_ID = "while_in_use_channel_01"
         internal const val EXTRA_LOCATION = "$PACKAGE_NAME.extra.LOCATION"
-        const val API_KEY = BuildConfig.WEATHER_API_KEY
+        internal const val API_KEY = BuildConfig.WEATHER_API_KEY
+        internal const val ACTION_FOREGROUND_ONLY_LOCATION_BROADCAST =
+            "$PACKAGE_NAME.action.FOREGROUND_ONLY_LOCATION_BROADCAST"
     }
 }

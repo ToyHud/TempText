@@ -23,6 +23,13 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/errorTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
             android:id="@+id/weatherStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -139,6 +146,16 @@
             app:layout_constraintVertical_bias="0.593"
             tools:ignore="SpeakableTextPresentCheck" />
 
+        <Button
+            android:id="@+id/buttonShareLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="652dp"
+            android:layout_marginEnd="140dp"
+            android:text="Share Location"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/cityView"
             android:layout_width="wrap_content"
@@ -208,7 +225,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="20dp" />
+            app:layout_constraintGuide_begin="30dp" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
