@@ -26,6 +26,7 @@ import com.example.android.temptext.R
 import com.example.android.temptext.databinding.FragmentMainWeatherBinding
 import com.example.android.temptext.network.ForegroundOnlyLocationService
 import com.example.android.temptext.network.ForegroundOnlyLocationService.Companion.API_KEY
+import com.example.android.temptext.network.ForegroundOnlyLocationService.Companion.REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE
 import com.example.android.temptext.network.SharedPreferenceUtil
 import com.example.android.temptext.network.toText
 import com.example.android.temptext.viewmodel.TempTextViewModel

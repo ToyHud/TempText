@@ -211,5 +211,6 @@ class ForegroundOnlyLocationService : Service() {
         internal const val API_KEY = BuildConfig.WEATHER_API_KEY
         internal const val ACTION_FOREGROUND_ONLY_LOCATION_BROADCAST =
             "$PACKAGE_NAME.action.FOREGROUND_ONLY_LOCATION_BROADCAST"
+        internal const val REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE = 34
     }
 }
