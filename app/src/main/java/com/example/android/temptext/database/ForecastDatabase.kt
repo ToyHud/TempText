@@ -3,37 +3,39 @@ package com.example.android.temptext.database
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
+import androidx.room.RoomDatabase
 
 @Database(
-    entities = [WeatherModel::class ,FutureWeatherModel::class], version =1),
+    entities = [WeatherModel::class ,FutureWeatherModel::class], version =1)
 
 
+     abstract class ForecastDatabase:RoomDatabase() {
+
+         public abstract fun weatherDao(): WeatherDao?
+         public abstract fun futureweatherDao(): FutureWeatherDao?
 
 
-    public abstract fun weatherDao():WeatherDao?
+         companion object {
+             @Volatile
+             private var INSTANCE: ForecastDatabase? = null
 
 
-companion object{
-         @Volatile
-         private var INSTANCE : WeatherDatabase? = null
+             fun getForecastDatabase(context: Context): ForecastDatabase? {
 
 
-         fun getWeatherDatabase(context: Context):WeatherDatabase?{
+                 if (INSTANCE == null) {
+                     INSTANCE = Room.databaseBuilder(
+                         context.applicationContext, ForecastDatabase::class.java,
+                         "ForecastDatabase"
+                     )
+                         .allowMainThreadQueries()
+                         .build()
 
 
-
-             if (INSTANCE == null){
-                 INSTANCE = Room.databaseBuilder<WeatherDatabase>(
-                     context.applicationContext, WeatherDatabase::class.java,
-                     "WeatherDatabase"
-                 )
-                     .allowMainThreadQueries()
-                     .build()
-
+                 }
+                 return INSTANCE
 
              }
-                return INSTANCE
-
          }
-     }
 
+     }

@@ -1,4 +1,4 @@
-package com.example.temptext.database
+package com.example.android.temptext.database
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -19,6 +19,7 @@ data class WeatherModel(
     @ColumnInfo(name = "wind-mph") val wind: Float?,
     @ColumnInfo(name = "text") val currentCondition:String?,
     @ColumnInfo(name = "co")val ozone : Float?
+
 )
 
 
