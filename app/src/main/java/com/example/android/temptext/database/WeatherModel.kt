@@ -3,7 +3,6 @@ package com.example.temptext.database
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.concurrent.locks.Condition
 
 
 @Entity(tableName = "userinfo")
