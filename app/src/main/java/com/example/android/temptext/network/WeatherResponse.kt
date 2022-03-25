@@ -3,8 +3,8 @@ package com.example.android.temptext.network
 import com.squareup.moshi.Json
 
 class WeatherResponse (
-    @Json(name = "location") val currentLocation: NestedWeatherResponse?,
-    @Json(name = "current") val currentWeather: NestedWeatherResponse?,
+    @Json(name = "location") val currentLocation: NestedWeatherResponse,
+    @Json(name = "current") val currentWeather: NestedWeatherResponse
 )
 
 class NestedWeatherResponse (
@@ -20,5 +20,5 @@ class NestedWeatherResponse (
 
 class WeatherConditions (
     @Json(name = "text") val currentCondition: String?,
-    @Json(name = "co") val ozone: Float?,
+    @Json(name = "co") val ozone: Float?
 )

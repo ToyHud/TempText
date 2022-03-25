@@ -1,9 +1,10 @@
 package com.example.android.temptext.network
 
-import androidx.lifecycle.LiveData
 import com.example.android.temptext.BuildConfig
+import com.example.android.temptext.viewmodel.TempTextViewModel
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import kotlinx.coroutines.withTimeout
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -31,7 +32,7 @@ interface WeatherApiService {
     ///alerts/active/area/{area}"
     @GET("current.json?")
     //change query back to LiveData<String>
-    suspend fun getCurrentWeather(@Query("key") key:String? = null, @Query("q") query: String, @Query("aqi") aqi: String? = null): WeatherResponse
+    suspend fun getCurrentWeather(@Query("key") key:String, @Query("q") query: String, @Query("aqi") aqi: String = "yes"): WeatherResponse
 
 }
 
@@ -40,3 +41,4 @@ object WeatherAlertApi{
         retrofit.create((WeatherApiService::class.java))
     }
 }
+//https://stackoverflow.com/questions/63092456/using-try-catch-block-in-swallowing-exceptions-when-using-kotlin-coroutines
