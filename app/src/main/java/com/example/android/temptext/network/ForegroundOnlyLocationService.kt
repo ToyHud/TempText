@@ -1,21 +1,22 @@
 package com.example.android.temptext.network
 
 import android.Manifest
-import android.app.Activity
-import android.app.NotificationManager
-import android.app.Service
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Binder
+import android.os.Build
 import android.os.IBinder
 import android.os.Looper
 import android.provider.ContactsContract.Directory.PACKAGE_NAME
 import android.util.Log
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
 import com.example.android.temptext.BuildConfig
 import com.example.android.temptext.MainActivity
+import com.example.android.temptext.ui.MainWeatherFragment
 import com.google.android.gms.location.*
 import java.util.concurrent.TimeUnit
 
@@ -75,14 +76,15 @@ class ForegroundOnlyLocationService : Service() {
                 if (serviceRunningInForeground) {
                     notificationManager.notify(
                         NOTIFICATION_ID,
-                        MainActivity().generateNotification(currentLocation)
+                        MainWeatherFragment().generateNotification(currentLocation)
                     )
                 }
             }
         }
     }
 
-    fun subscribeToLocationUpdates() {
+
+   /* fun subscribeToLocationUpdates() {
         Log.d(TAG, "subscribeToLocationUpdates()")
 
         SharedPreferenceUtil.saveLocationTrackingPref(this, true)
@@ -100,7 +102,7 @@ class ForegroundOnlyLocationService : Service() {
             SharedPreferenceUtil.saveLocationTrackingPref(this, false)
             Log.e(TAG, "Lost location permissions. Couldn't remove updates. $unlikely")
         }
-    }
+    }*/
 
     fun unsubscribeToLocationUpdates() {
         Log.d(TAG, "unsubscribeToLocationUpdates()")
@@ -212,5 +214,7 @@ class ForegroundOnlyLocationService : Service() {
         internal const val ACTION_FOREGROUND_ONLY_LOCATION_BROADCAST =
             "$PACKAGE_NAME.action.FOREGROUND_ONLY_LOCATION_BROADCAST"
         internal const val REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE = 34
+        internal const val EXTRA_CANCEL_LOCATION_TRACKING_FROM_NOTIFICATION =
+            "$PACKAGE_NAME.extra.CANCEL_LOCATION_TRACKING_FROM_NOTIFICATION"
     }
 }

@@ -3,13 +3,13 @@ package com.example.android.temptext.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
+import android.app.*
 import android.content.*
 import android.content.pm.PackageManager
 import android.location.Location
+import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
-
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -18,16 +18,18 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
+import com.example.android.temptext.MainActivity
 import com.example.android.temptext.R
 import com.example.android.temptext.databinding.FragmentMainWeatherBinding
 import com.example.android.temptext.network.ForegroundOnlyLocationService
 import com.example.android.temptext.network.ForegroundOnlyLocationService.Companion.API_KEY
+import com.example.android.temptext.network.ForegroundOnlyLocationService.Companion.EXTRA_CANCEL_LOCATION_TRACKING_FROM_NOTIFICATION
 import com.example.android.temptext.network.ForegroundOnlyLocationService.Companion.REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE
-import com.example.android.temptext.network.SharedPreferenceUtil
 import com.example.android.temptext.network.toText
 import com.example.android.temptext.viewmodel.TempTextViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -57,14 +59,13 @@ class MainWeatherFragment : Fragment() {
     // Provides location updates for while-in-use feature.
     private var foregroundOnlyLocationService: ForegroundOnlyLocationService? = null
     private var foregroundOnlyLocationServiceBound = false
-    private lateinit var locationSearch: Button
-    private lateinit var sharedPreferences: SharedPreferences
     /**
      * Provides the entry point to the Fused Location Provider API.
      * FusedLocationProviderClient - Main class for receiving location updates
      */
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val cancellationTokenSource = CancellationTokenSource()
+    private lateinit var notificationManager: NotificationManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -86,6 +87,7 @@ class MainWeatherFragment : Fragment() {
         windTextView = binding.wind
         locationTextView = binding.searchView
         cityTextView = binding.cityView
+        foregroundOnlyBroadcastReceiver = ForegroundOnlyBroadcastReceiver()
 
         alertsButton.setOnClickListener { findNavController().navigate(R.id.action_mainWeatherFragment_to_setUpAlertFragment) }
         //allows search view to take zip code or city/state and add as paramater for api url
@@ -100,29 +102,6 @@ class MainWeatherFragment : Fragment() {
             }
         })
 
-        foregroundOnlyBroadcastReceiver = ForegroundOnlyBroadcastReceiver()
-
-        sharedPreferences = this.activity!!.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
-
-        locationSearch = binding.buttonShareLocation
-
-        locationSearch.setOnClickListener {
-            val enabled = sharedPreferences.getBoolean(
-                SharedPreferenceUtil.KEY_FOREGROUND_ENABLED, false)
-
-            if (enabled) {
-                foregroundOnlyLocationService?.unsubscribeToLocationUpdates()
-            } else {
-
-                // TODO: Step 1.0, Review Permissions: Checks and requests if needed.
-                if (foregroundPermissionApproved()) {
-                    foregroundOnlyLocationService?.subscribeToLocationUpdates()
-                        ?: Log.d("MainAct", "Service Not Bound")
-                } else {
-                    requestForegroundPermissions()
-                }
-            }
-        }
     }
     override fun onResume() {
         super.onResume()
@@ -239,6 +218,78 @@ class MainWeatherFragment : Fragment() {
             )
         }
     }
+    /*
+    * Generates a BIG_TEXT_STYLE Notification that represent latest location.
+    */
+    fun generateNotification(location: Location?): Notification {
+        Log.d("MainWeatFrag", "generateNotification()")
+
+        // Main steps for building a BIG_TEXT_STYLE notification:
+        //      0. Get data
+        //      1. Create Notification Channel for O+
+        //      2. Build the BIG_TEXT_STYLE
+        //      3. Set up Intent / Pending Intent for notification
+        //      4. Build and issue the notification
+
+        // 0. Get data
+        val mainNotificationText = location?.toText() ?: getString(R.string.no_location_text)
+        val titleText = getString(R.string.app_name)
+
+        // 1. Create Notification Channel for O+ and beyond devices (26+).
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            val notificationChannel = NotificationChannel(
+                ForegroundOnlyLocationService.NOTIFICATION_CHANNEL_ID, titleText, NotificationManager.IMPORTANCE_DEFAULT)
+
+            // Adds NotificationChannel to system. Attempting to create an
+            // existing notification channel with its original values performs
+            // no operation, so it's safe to perform the below sequence.
+            notificationManager.createNotificationChannel(notificationChannel)
+        }
+
+        // 2. Build the BIG_TEXT_STYLE.
+        val bigTextStyle = NotificationCompat.BigTextStyle()
+            .bigText(mainNotificationText)
+            .setBigContentTitle(titleText)
+
+        // 3. Set up main Intent/Pending Intents for notification.
+        val launchActivityIntent = Intent(this.requireActivity(), MainActivity::class.java)
+
+        val cancelIntent = Intent(this.requireContext(), ForegroundOnlyLocationService::class.java)
+        cancelIntent.putExtra(EXTRA_CANCEL_LOCATION_TRACKING_FROM_NOTIFICATION, true)
+
+        val servicePendingIntent = PendingIntent.getService(
+            this.requireContext(), 0, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        val activityPendingIntent = PendingIntent.getActivity(
+            this.requireContext(), 0, launchActivityIntent, 0)
+
+        // 4. Build and issue the notification.
+        // Notification Channel Id is ignored for Android pre O (26).
+        val notificationCompatBuilder =
+            NotificationCompat.Builder(this.requireContext(),
+                ForegroundOnlyLocationService.NOTIFICATION_CHANNEL_ID
+            )
+
+        return notificationCompatBuilder
+            .setStyle(bigTextStyle)
+            .setContentTitle(titleText)
+            .setContentText(mainNotificationText)
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setDefaults(NotificationCompat.DEFAULT_ALL)
+            .setOngoing(true)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .addAction(R.drawable.ic_launch, getString(R.string.launch_activity),
+                activityPendingIntent
+            )
+            .addAction(
+                R.drawable.ic_cancel,
+                getString(R.string.stop_location_updates_button_text),
+                servicePendingIntent
+            )
+            .build()
+    }
+
     override fun onStart() {
         super.onStart()
         /* *
