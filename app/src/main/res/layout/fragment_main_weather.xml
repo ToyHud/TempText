@@ -14,6 +14,13 @@
         tools:layout_editor_absoluteY="0dp">
 
         <TextView
+            android:id="@+id/errorTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
             android:id="@+id/weatherStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -189,7 +196,7 @@
             tools:ignore="SpeakableTextPresentCheck" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/cityView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="124dp"

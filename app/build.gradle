@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    id("androidx.navigation.safeargs.kotlin")
 }
 apply plugin: 'kotlin-kapt'
 
@@ -73,6 +74,8 @@ dependencies {
     implementation("androidx.navigation:navigation-dynamic-features-fragment:2.4.1")
     // Jetpack Compose Integration
     implementation("androidx.navigation:navigation-compose:2.4.1")
+    //GIF View
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.13.2.'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

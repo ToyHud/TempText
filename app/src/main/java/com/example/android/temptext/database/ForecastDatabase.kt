@@ -5,37 +5,29 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
+// holds the database and serves as the main access point for the underlying connection to app's persisted data.
 @Database(
-    entities = [WeatherModel::class ,FutureWeatherModel::class], version =1)
+    entities = [WeatherModel::class], version = 1
+)
+abstract class ForecastDatabase : RoomDatabase() {
+    abstract fun weatherDao(): WeatherDao?
 
+    companion object {
+        @Volatile
+        private var INSTANCE: ForecastDatabase? = null
 
-     abstract class ForecastDatabase:RoomDatabase() {
-
-         public abstract fun weatherDao(): WeatherDao?
-         public abstract fun futureweatherDao(): FutureWeatherDao?
-
-
-         companion object {
-             @Volatile
-             private var INSTANCE: ForecastDatabase? = null
-
-
-             fun getForecastDatabase(context: Context): ForecastDatabase? {
-
-
-                 if (INSTANCE == null) {
-                     INSTANCE = Room.databaseBuilder(
-                         context.applicationContext, ForecastDatabase::class.java,
-                         "ForecastDatabase"
-                     )
-                         .allowMainThreadQueries()
-                         .build()
-
-
-                 }
-                 return INSTANCE
-
-             }
-         }
-
-     }
+        fun getForecastDatabase(context: Context): ForecastDatabase {
+            return INSTANCE ?: synchronized(this) {
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    ForecastDatabase::class.java,
+                    "ForecastDatabase"
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
+                INSTANCE = instance
+                return instance
+            }
+        }
+    }
+}

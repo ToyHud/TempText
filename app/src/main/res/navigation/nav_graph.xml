@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_mainWeatherFragment_to_setUpAlertFragment"
             app:destination="@id/setUpAlertFragment" />
+        <argument
+            android:name="weatherDataPassed"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/setUpAlertFragment"
@@ -22,5 +25,8 @@
         <action
             android:id="@+id/action_setUpAlertFragment_to_mainWeatherFragment"
             app:destination="@id/mainWeatherFragment" />
+        <argument
+            android:name="weatherDataReceived"
+            app:argType="string" />
     </fragment>
 </navigation>

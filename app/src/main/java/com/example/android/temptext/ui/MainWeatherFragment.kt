@@ -23,8 +23,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
+import androidx.room.Room
 import com.example.android.temptext.MainActivity
 import com.example.android.temptext.R
+import com.example.android.temptext.database.ForecastDatabase
 import com.example.android.temptext.databinding.FragmentMainWeatherBinding
 import com.example.android.temptext.network.ForegroundOnlyLocationService
 import com.example.android.temptext.network.ForegroundOnlyLocationService.Companion.API_KEY
@@ -50,15 +52,18 @@ class MainWeatherFragment : Fragment() {
     private lateinit var aqiTextView: TextView
     private lateinit var windTextView: TextView
     private val viewModel: TempTextViewModel by activityViewModels()
+
     private lateinit var cityTextView: TextView
     private var _binding: FragmentMainWeatherBinding? = null
     private val binding get() = _binding!!
     private lateinit var locationTextView: SearchView
+//    private val weatherArgs: MainWeatherFragmentArgs by navArgs()
     // Listens for location broadcasts from ForegroundOnlyLocationService.
     private lateinit var foregroundOnlyBroadcastReceiver: ForegroundOnlyBroadcastReceiver
     // Provides location updates for while-in-use feature.
     private var foregroundOnlyLocationService: ForegroundOnlyLocationService? = null
     private var foregroundOnlyLocationServiceBound = false
+
     /**
      * Provides the entry point to the Fused Location Provider API.
      * FusedLocationProviderClient - Main class for receiving location updates
@@ -76,6 +81,7 @@ class MainWeatherFragment : Fragment() {
         _binding = FragmentMainWeatherBinding.inflate(inflater, container, false)
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //set variables for xml views for cleaner code throughout
@@ -89,7 +95,23 @@ class MainWeatherFragment : Fragment() {
         cityTextView = binding.cityView
         foregroundOnlyBroadcastReceiver = ForegroundOnlyBroadcastReceiver()
 
+        setupAlerts()
+        searchLocation()
+    }
+    private fun setupAlerts() {
+/*        val weatherData = weatherArgs.weatherDataPassed
+        degreeTextView.text = weatherData
+        val action = MainWeatherFragmentDirections.actionMainWeatherFragmentToSetUpAlertFragment(weatherData)
+        Log.d("MainWeather", weatherData)*/
         alertsButton.setOnClickListener { findNavController().navigate(R.id.action_mainWeatherFragment_to_setUpAlertFragment) }
+
+        val db = Room.databaseBuilder(
+            this.requireContext(),
+            ForecastDatabase::class.java, "userInfo"
+        ).build()
+        db.weatherDao()
+    }
+    private fun searchLocation(){
         //allows search view to take zip code or city/state and add as paramater for api url
         locationTextView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
@@ -97,20 +119,22 @@ class MainWeatherFragment : Fragment() {
                 viewModel.showCurrentWeather(API_KEY, query, "yes")
                 return true
             }
+
             override fun onQueryTextChange(newText: String?): Boolean {
                 return false
             }
         })
-
     }
     override fun onResume() {
         super.onResume()
         LocalBroadcastManager.getInstance(this.requireContext()).registerReceiver(
             foregroundOnlyBroadcastReceiver,
             IntentFilter(
-                ForegroundOnlyLocationService.ACTION_FOREGROUND_ONLY_LOCATION_BROADCAST)
+                ForegroundOnlyLocationService.ACTION_FOREGROUND_ONLY_LOCATION_BROADCAST
+            )
         )
     }
+
     //sets api call data to views
     private fun displayWeather() {
         viewModel.apiResponse.observe(this, {
@@ -118,7 +142,7 @@ class MainWeatherFragment : Fragment() {
             val currentWeather = it.currentWeather.currentWeatherCondition!!.currentCondition!!
             val city = it.currentLocation.city!!
             val airQuality = it.currentWeather.aqi!!.ozone!!
-            Log.d("FragDisplayWeather", currentWeather)
+
             if (airQuality <= 50) {
                 aqiTextView.text = resources.getString(R.string.good)
             } else if (airQuality >= 51 || airQuality <= 100) {
@@ -138,24 +162,21 @@ class MainWeatherFragment : Fragment() {
                 windTextView.text = response.wind.toString()
                 statusTextView.text = currentWeather
                 cityTextView.text = city
-                Log.d("MainCity", city)
             }
         })
     }
+
     //sets location data pulled from fused location provider as parameter for api url
     @SuppressLint("MissingPermission")
     fun getLastLocation(activity: Activity) {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
         fusedLocationClient.lastLocation
             .addOnCompleteListener { location ->
-                Log.d("ForegroundLocate1", "$location")
-                Log.d("ForegroundLocateResult", "${location.result}")
                 if (location.isSuccessful && location.result != null) {
                     val latitude = location.result.latitude
                     val longitude = location.result.longitude
                     val currentLocation = """$latitude,$longitude"""
                     viewModel.showCurrentWeather(API_KEY, currentLocation, "yes")
-                    Log.d("MainLocate", currentLocation)
                 } else {
                     MainWeatherFragment().requestForegroundPermissions()
                     Log.d(
@@ -167,6 +188,7 @@ class MainWeatherFragment : Fragment() {
                 }
             }
     }
+
     // Monitors connection to the while-in-use service.
     private val foregroundOnlyServiceConnection = object : ServiceConnection {
 
@@ -181,6 +203,7 @@ class MainWeatherFragment : Fragment() {
             foregroundOnlyLocationServiceBound = false
         }
     }
+
     //Method checks if permissions approved.
     private fun foregroundPermissionApproved(): Boolean {
         return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(
@@ -188,6 +211,7 @@ class MainWeatherFragment : Fragment() {
             Manifest.permission.ACCESS_FINE_LOCATION
         )
     }
+
     //Method requests permissions.
     fun requestForegroundPermissions() {
         val provideRationale = foregroundPermissionApproved()
@@ -218,6 +242,7 @@ class MainWeatherFragment : Fragment() {
             )
         }
     }
+
     /*
     * Generates a BIG_TEXT_STYLE Notification that represent latest location.
     */
@@ -239,7 +264,10 @@ class MainWeatherFragment : Fragment() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
             val notificationChannel = NotificationChannel(
-                ForegroundOnlyLocationService.NOTIFICATION_CHANNEL_ID, titleText, NotificationManager.IMPORTANCE_DEFAULT)
+                ForegroundOnlyLocationService.NOTIFICATION_CHANNEL_ID,
+                titleText,
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
 
             // Adds NotificationChannel to system. Attempting to create an
             // existing notification channel with its original values performs
@@ -259,15 +287,18 @@ class MainWeatherFragment : Fragment() {
         cancelIntent.putExtra(EXTRA_CANCEL_LOCATION_TRACKING_FROM_NOTIFICATION, true)
 
         val servicePendingIntent = PendingIntent.getService(
-            this.requireContext(), 0, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            this.requireContext(), 0, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT
+        )
 
         val activityPendingIntent = PendingIntent.getActivity(
-            this.requireContext(), 0, launchActivityIntent, 0)
+            this.requireContext(), 0, launchActivityIntent, 0
+        )
 
         // 4. Build and issue the notification.
         // Notification Channel Id is ignored for Android pre O (26).
         val notificationCompatBuilder =
-            NotificationCompat.Builder(this.requireContext(),
+            NotificationCompat.Builder(
+                this.requireContext(),
                 ForegroundOnlyLocationService.NOTIFICATION_CHANNEL_ID
             )
 
@@ -279,7 +310,8 @@ class MainWeatherFragment : Fragment() {
             .setDefaults(NotificationCompat.DEFAULT_ALL)
             .setOngoing(true)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .addAction(R.drawable.ic_launch, getString(R.string.launch_activity),
+            .addAction(
+                R.drawable.ic_launch, getString(R.string.launch_activity),
                 activityPendingIntent
             )
             .addAction(
@@ -289,7 +321,6 @@ class MainWeatherFragment : Fragment() {
             )
             .build()
     }
-
     override fun onStart() {
         super.onStart()
         /* *
@@ -299,10 +330,14 @@ class MainWeatherFragment : Fragment() {
         if (!fusedLocation.checkPermissions(this.requireContext())) {
             fusedLocation.requestPermissions(this.requireActivity())
         } else {
-           getLastLocation(this.requireActivity())
+            getLastLocation(this.requireActivity())
         }
         val serviceIntent = Intent(activity, ForegroundOnlyLocationService::class.java)
-        this.activity!!.bindService(serviceIntent, foregroundOnlyServiceConnection, Context.BIND_AUTO_CREATE)
+        this.activity!!.bindService(
+            serviceIntent,
+            foregroundOnlyServiceConnection,
+            Context.BIND_AUTO_CREATE
+        )
     }
     private fun logResultsToScreen(output: String) {
         val outputWithPreviousLogs = "$output\n${binding.errorTextView.text}"
