@@ -1,10 +1,8 @@
 package com.example.android.temptext.network
 
 import com.example.android.temptext.BuildConfig
-import com.example.android.temptext.viewmodel.TempTextViewModel
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import kotlinx.coroutines.withTimeout
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
