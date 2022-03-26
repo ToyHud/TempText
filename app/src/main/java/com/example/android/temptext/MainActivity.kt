@@ -23,4 +23,23 @@ class MainActivity : AppCompatActivity() {
    override fun onSupportNavigateUp(): Boolean {
        return navController.navigateUp() || super.onSupportNavigateUp()
    }
+    fun notification (){
+       val textTitle = "alert"
+       val textContent = "weather alerts"
+       var builder = NotificationCompat.Builder(this, CHANNEL_ID)
+       .setSmallIcon(R.drawable.notification_icon)
+       .setContentTitle(textTitle)
+       .setContentText(textContent)
+       .setPriority(NotificationCompat.PRIORITY_DEFAULT)}
+
+    private fun createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = getString(R.string.channel_name)
+            val descriptionText = getString(R.string.channel_description)
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(CHANNEL_ID, name, importance)
+        }
+    }
 }
