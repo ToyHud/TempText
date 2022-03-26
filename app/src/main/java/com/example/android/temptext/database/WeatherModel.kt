@@ -3,7 +3,6 @@ package com.example.android.temptext.database
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.concurrent.locks.Condition
 
 
 @Entity(tableName = "userinfo")
@@ -20,6 +19,7 @@ data class WeatherModel(
     @ColumnInfo(name = "wind-mph") val wind: Float?,
     @ColumnInfo(name = "text") val currentCondition:String?,
     @ColumnInfo(name = "co")val ozone : Float?
+
 )
 
 

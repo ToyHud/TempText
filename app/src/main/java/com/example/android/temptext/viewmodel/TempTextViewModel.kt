@@ -1,13 +1,10 @@
 package com.example.android.temptext.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.ViewModel
-import com.example.android.temptext.BuildConfig
+import androidx.lifecycle.viewModelScope
 import com.example.android.temptext.network.WeatherAlertApi
 import com.example.android.temptext.network.WeatherResponse
-import com.example.android.temptext.ui.MainWeatherFragment
 import kotlinx.coroutines.launch
 
 class TempTextViewModel : ViewModel() {

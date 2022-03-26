@@ -95,5 +95,6 @@ dependencies {
     testImplementation("androidx.room:room-testing:2.4.1")
     // optional - Paging 3 Integration
     implementation("androidx.room:room-paging:2.4.1")
-
+//Gif animation
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
 }

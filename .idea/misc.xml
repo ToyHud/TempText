@@ -3,10 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+<<<<<<< HEAD
+        <entry key="..\:/Users/TraceyC/AndroidStudioProjects/TempText/app/src/main/res/layout/activity_main.xml" value="0.12907608695652173" />
+        <entry key="..\:/Users/TraceyC/AndroidStudioProjects/TempText/app/src/main/res/layout/fragment_main_weather.xml" value="0.12907608695652173" />
+        <entry key="..\:/Users/TraceyC/AndroidStudioProjects/TempText/app/src/main/res/layout/fragment_set_up_alert.xml" value="0.12907608695652173" />
+=======
+        <entry key="..\:/Users/ayana/AndroidStudioProjects/TempTextFull/app/src/main/res/drawable/round_corner.xml" value="0.20677083333333332" />
+>>>>>>> origin/main
         <entry key="..\:/Users/ayana/AndroidStudioProjects/TempTextFull/app/src/main/res/layout/activity_main.xml" value="0.132" />
         <entry key="..\:/Users/ayana/AndroidStudioProjects/TempTextFull/app/src/main/res/layout/fragment_alert_set_up.xml" value="0.268" />
+        <entry key="..\:/Users/ayana/AndroidStudioProjects/TempTextFull/app/src/main/res/layout/fragment_landing.xml" value="0.25" />
         <entry key="..\:/Users/ayana/AndroidStudioProjects/TempTextFull/app/src/main/res/layout/fragment_landing_page.xml" value="0.246875" />
-        <entry key="..\:/Users/ayana/AndroidStudioProjects/TempTextFull/app/src/main/res/layout/fragment_main_weather.xml" value="0.268" />
+        <entry key="..\:/Users/ayana/AndroidStudioProjects/TempTextFull/app/src/main/res/layout/fragment_main_weather.xml" value="0.2198443579766537" />
         <entry key="..\:/Users/ayana/AndroidStudioProjects/TempTextFull/app/src/main/res/layout/fragment_set_up_alert.xml" value="0.246875" />
         <entry key="..\:/Users/mylee/Downloads/TempText/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/mylee/Downloads/TempText/app/src/main/res/layout/fragment_main_weather.xml" value="0.25" />
