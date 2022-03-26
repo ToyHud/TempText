@@ -19,7 +19,7 @@ interface WeatherDao {
     fun getAllUserInfo(): Flow<List<WeatherModel>>
 
     @Query("SELECT fahrenheit, celsius FROM userInfo")
-    fun loadTemperature(): List<TempTuple>
+    fun loadTemperature(): Flow<TempTuple>
 
     @Delete
     fun deleteUser(user: WeatherModel?)

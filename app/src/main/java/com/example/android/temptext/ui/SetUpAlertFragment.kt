@@ -35,7 +35,7 @@ class SetUpAlertFragment : Fragment() {
         saveButton = binding.savebtn
         saveButton.setOnClickListener {
 
-            //viewModel.insertWeatherData()
+           // viewModel.insertWeatherData()
             Snackbar.make(view, "Saved to database", Snackbar.LENGTH_SHORT).show()
         }
     }

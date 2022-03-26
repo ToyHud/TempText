@@ -9,11 +9,13 @@ class UserID {
 
     @Synchronized
     fun id(context: Context): String? {
+
         if (uniqueID == null) {
             val sharedPrefs: SharedPreferences = context.getSharedPreferences(
                 PREF_UNIQUE_ID, Context.MODE_PRIVATE
             )
             uniqueID = sharedPrefs.getString(PREF_UNIQUE_ID, null)
+            //creates new userId if one isn't created
             if (uniqueID == null) {
                 uniqueID = UUID.randomUUID().toString()
 

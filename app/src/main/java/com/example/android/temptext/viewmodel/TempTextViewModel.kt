@@ -1,13 +1,14 @@
 package com.example.android.temptext.viewmodel
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import com.example.android.temptext.database.TempTuple
+import com.example.android.temptext.database.WeatherDao
+import com.example.android.temptext.database.WeatherModel
 import com.example.android.temptext.network.WeatherAlertApi
 import com.example.android.temptext.network.WeatherResponse
 import kotlinx.coroutines.launch
 
-class TempTextViewModel : ViewModel() {
+class TempTextViewModel(val weatherDao: WeatherDao) : ViewModel() {
     private var _apiResponse = MutableLiveData<WeatherResponse>()
     val apiResponse = _apiResponse
 
@@ -15,6 +16,7 @@ class TempTextViewModel : ViewModel() {
     private fun getCurrentWeatherResponse(apiKey: String, area: String, aqi: String) {
         try {
             viewModelScope.launch {
+                //create access for weatherfragment
                 apiResponse.value = WeatherAlertApi.retrofitService.getCurrentWeather(apiKey,area,aqi)
             }
         } catch (e: Exception) {
@@ -24,18 +26,21 @@ class TempTextViewModel : ViewModel() {
     fun showCurrentWeather(apiKey: String, appArea: String, aqi: String) {
         getCurrentWeatherResponse(apiKey, appArea, aqi)
     }
-   /* fun insertWeatherData(user: WeatherModel){
+    fun insertWeatherData(user: WeatherModel){
         viewModelScope.launch { weatherDao.insertUser(user) }
     }
     fun deleteUserData(user: WeatherModel){
         viewModelScope.launch { weatherDao.deleteUser(user) }
     }
-    fun getAllUsers(user: WeatherModel): LiveData<List<WeatherModel>>{
+    fun getAllUsers(user: WeatherModel): LiveData<List<WeatherModel>> {
         return weatherDao.getAllUserInfo().asLiveData()
-    }*/
+    }
+    fun getWeatherData(tempTuple: TempTuple): Float{
+       return tempTuple.fahrenheit
+    }
 }
 
-/*
+
 class WeatherViewModelFactory(private val weatherDao: WeatherDao) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(TempTextViewModel::class.java)) {
@@ -45,4 +50,4 @@ class WeatherViewModelFactory(private val weatherDao: WeatherDao) : ViewModelPro
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 
-}*/
+}
