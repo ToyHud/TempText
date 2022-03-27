@@ -44,7 +44,6 @@ During development of this application, all samples were built using Android Stu
    <li> Describe what actually happened.</li>
    <li>Please provide any additional notes (you tried A, but it didn't work)</li>
 </ul>
-</ul>
 
 ## Thanks for visiting our TempText Repo
 We appreciate any and all input!
