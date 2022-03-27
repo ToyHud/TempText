@@ -40,9 +40,9 @@ During development of this application, all samples were built using Android Stu
         <li>Be specific</li>
         <li>Give sample code, if possible.</li>
        </ul>
-   <li> Describe what you expected to happen.</li>
-   <li> Describe what actually happened.</li>
-   <li>Please provide any additional notes (you tried A, but it didn't work)</li>
+ <li> Describe what you expected to happen.</li>
+ <li> Describe what actually happened.</li>
+ <li>Please provide any additional notes (you tried A, but it didn't work)</li>
 </ul>
 
 ## Thanks for visiting our TempText Repo
