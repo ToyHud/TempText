@@ -23,7 +23,7 @@ During development of this application, all samples were built using Android Stu
 6. Sit back and wait for alerts to appear in notification bar.
 
 ## Contributions to the Repo
-1, Report any bugs using Github's issues
+1. Report any bugs using Github's issues
 2. Report a bug by opening a new issue.
 3. Make sure any bug report contains as many details as possible, background, and sample code.
     - Include a quick summary and/or background
