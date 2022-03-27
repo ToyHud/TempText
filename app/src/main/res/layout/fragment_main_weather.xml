@@ -166,7 +166,7 @@
             android:src="@drawable/rainanime"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="ImageContrastCheck" />
+            tools:ignore="ImageContrastCheck,MissingClass" />
 
         <pl.droidsonroids.gif.GifImageView
             android:id="@+id/pollen"
@@ -178,6 +178,7 @@
             android:contentDescription="@string/pollen_image"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="MissingClass"
             tools:srcCompat="@tools:sample/avatars" />
 
         <Button
