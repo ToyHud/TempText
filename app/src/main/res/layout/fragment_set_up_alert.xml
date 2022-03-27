@@ -4,7 +4,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-android:background="@drawable/gradient_bg"
+android:background="@drawable/bluee"
 tools:context=".ui.SetUpAlertFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -51,15 +51,15 @@ tools:context=".ui.SetUpAlertFragment">
             <RadioButton
                 android:id="@+id/temp70"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="48dp"
                 android:text="@string/temp_select_low1"
-                android:textColor="#FFFFFF"
+                android:textColor="#FDFDFD"
                 android:textSize="20sp" />
 
             <RadioButton
                 android:id="@+id/temp80"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="48dp"
                 android:text="@string/temp_select_moderate1"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp" />
@@ -67,15 +67,15 @@ tools:context=".ui.SetUpAlertFragment">
             <RadioButton
                 android:id="@+id/temp90"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="48dp"
                 android:text="@string/temp_select_high1"
-                android:textColor="#FFFDFD"
+                android:textColor="#FFFFFF"
                 android:textSize="20sp" />
 
             <RadioButton
                 android:id="@+id/temp100"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="48dp"
                 android:text="@string/temp_select_severe1"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp" />
@@ -104,9 +104,10 @@ tools:context=".ui.SetUpAlertFragment">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="172dp"
+            android:layout_marginTop="8dp"
             android:fontFamily="sans-serif-light"
             android:text="@string/below"
-            android:textColor="#FFFFFF"
+            android:textColor="#FFF9F9"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/alertBelow" />
@@ -126,45 +127,45 @@ tools:context=".ui.SetUpAlertFragment">
             <RadioButton
                 android:id="@+id/temp40"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="48dp"
                 android:text="@string/temp_select_high"
-                android:textColor="#F6F1F1"
+                android:textColor="#FFFFFF"
                 android:textSize="20sp" />
 
             <RadioButton
                 android:id="@+id/temp30"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="48dp"
                 android:text="@string/temp_select_moderate"
-                android:textColor="#FFFFFF"
+                android:textColor="#FFFDFD"
                 android:textSize="20sp" />
 
             <RadioButton
                 android:id="@+id/temp20"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="48dp"
                 android:text="@string/temp_select_low"
-                android:textColor="#FDFDFD"
+                android:textColor="#FDFCFC"
                 android:textSize="20sp" />
 
             <RadioButton
                 android:id="@+id/temp10"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="48dp"
                 android:text="@string/temp_select_severe"
-                android:textColor="#EFE9E9"
+                android:textColor="#FBFBFB"
                 android:textSize="20sp" />
         </RadioGroup>
 
         <Button
             android:id="@+id/savebtn"
-            android:layout_width="110dp"
+            android:layout_width="120dp"
             android:layout_height="60dp"
-            android:layout_marginEnd="148dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginEnd="144dp"
+            android:layout_marginBottom="24dp"
             android:text="@string/save"
             android:textColor="#000"
-            android:textSize="18dp"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

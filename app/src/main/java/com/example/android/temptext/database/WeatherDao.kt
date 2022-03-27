@@ -1,24 +1,27 @@
 package com.example.android.temptext.database
 
-import androidx.lifecycle.LiveData
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
 
+import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 
+//provide methods that app uses to query, update, insert, and delete data in the database
+
+@Dao
 interface WeatherDao {
-    @Query("SELECT * FROM WeatherImages")
-    fun getAll():LiveData<List<WeatherImageEntity>>
 
-    @Query("SELECT * FROM WeatherImages ORDER BY id DESC LIMIT 1")
-    fun getMostRecentlyAddWeather (): WeatherImageEntity
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertUser(user: WeatherModel?)
 
-    @Query ( "DELETE from WeatherImages where id = (select max (id)-1 from WeatherImages)")
-    suspend fun deleteWeather()
+    @Update
+    fun updateUserInfo(vararg user: WeatherModel?)
 
-    @Insert
-    suspend fun addWeatherImage (weatherImageEntity: WeatherImageEntity)
+    @Query("SELECT * FROM userInfo ORDER BY id DESC")
+    fun getAllUserInfo(): Flow<List<WeatherModel>>
+
+    @Query("SELECT fahrenheit, celsius FROM userInfo")
+    fun loadTemperature(): Flow<TempTuple>
 
     @Delete
-    suspend fun deleteUser (user: String)
+    fun deleteUser(user: WeatherModel?)
+
 }
