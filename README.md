@@ -13,26 +13,38 @@ Users who like weather apps and/or would like customized weather information. Th
 During development of this application, all samples were built using Android Studio 3.3, and the codelabs we relied upon, assume you are using Android Studio 3.3 with corresponding libraries, dependencies, and available features. See the Android Studio download page for details.
 
 ## Getting Started
-1. Install the application from the Google Play Store.
-   
+
+<ol>
+<li> Install the application from the Google Play Store.</li>
+</ol> 
+
 ## Navigation
-2. Enable location and/or enter your city or zip code.
-3. Current weather will populate.
-4. Select customized alerts and save.
-5. The app will save data to the database.
-6. Sit back and wait for alerts to appear in notification bar.
+
+<ol>
+   <li>Enable location and/or enter your city or zip code.</li>
+   <li>Current weather will populate.</li>
+   <li>Select customized alerts and save.</li>
+   <li>The app will save data to the database.</li>
+   <li>Sit back and wait for alerts to appear in notification bar.</li>
+</ol>
 
 ## Contributions to the Repo
-1. Report any bugs using Github's issues
-2. Report a bug by opening a new issue.
-3. Make sure any bug report contains as many details as possible, background, and sample code.
-    - Include a quick summary and/or background
-    - Provide steps to reproduce the bug you experienced.
-        - Be specific
-        - Give sample code, if possible.
-    - Describe what you expected to happen.
-    - Describe what actually happened.
-    - Please provide any additional notes (you tried A, but it didn't work)
-    
+<ul>
+<li>Report any bugs using Github's issues.</li>
+<li>Report a bug by opening a new issue.</li>
+<li>Make sure any bug report contains as many details as possible, background, and sample code.</li>
+   <ul>
+   <li>Include a quick summary and/or background</li>
+   <li>Provide steps to reproduce the bug you experienced.</li>
+       <ul>
+        <li>Be specific</li>
+        <li>Give sample code, if possible.</li>
+       </ul>
+   <li> Describe what you expected to happen.</li>
+   <li> Describe what actually happened.</li>
+   <li>Please provide any additional notes (you tried A, but it didn't work)</li>
+</ul>
+</ul>
+
 ## Thanks for visiting our TempText Repo
 We appreciate any and all input!
