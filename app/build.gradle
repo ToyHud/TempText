@@ -5,6 +5,7 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")
 }
 apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdk 31
@@ -100,4 +101,5 @@ dependencies {
     implementation("androidx.room:room-paging:2.4.1")
 //Gif animation
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
+    implementation "androidx.core:core-ktx:+"
 }

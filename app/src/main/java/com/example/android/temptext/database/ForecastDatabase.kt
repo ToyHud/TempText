@@ -6,9 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 // holds the database and serves as the main access point for the underlying connection to app's persisted data.
-@Database(
-    entities = [WeatherModel::class], version = 1
-)
+@Database(entities = [WeatherModel::class], version = 2)
 abstract class ForecastDatabase : RoomDatabase() {
     abstract fun weatherDao(): WeatherDao?
 
@@ -31,3 +29,4 @@ abstract class ForecastDatabase : RoomDatabase() {
         }
     }
 }
+
