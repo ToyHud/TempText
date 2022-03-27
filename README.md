@@ -7,7 +7,6 @@ A user can set alerts which notify them if the weather is scheduled to be above 
 ## ***Click to watch demo video ***
 
 ## Market Use
-<<<<<<< HEAD
 Users who like weather apps and/or would like customized weather information. This app could be especially useful during seasonal storms and/or for rapidly changing weather incidents (i.e. pop-up thundershowers, tornadoes, nor'easters, tsunamis).
 
 ## Android Studio Version
@@ -24,7 +23,6 @@ During development of this application, all samples were built using Android Stu
 6. Sit back and wait for alerts to appear in notification bar.
 
 ## Contributions to the Repo
-
 1, Report any bugs using Github's issues
 2. Report a bug by opening a new issue.
 3. Make sure any bug report contains as many details as possible, background, and sample code.
@@ -38,6 +36,3 @@ During development of this application, all samples were built using Android Stu
     
 ## Thanks for visiting our TempText Repo
 We appreciate any and all input!
-
-
-git 
