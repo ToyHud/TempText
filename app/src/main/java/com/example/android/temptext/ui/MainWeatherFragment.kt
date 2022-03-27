@@ -23,10 +23,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
-import androidx.room.Room
 import com.example.android.temptext.MainActivity
 import com.example.android.temptext.R
-import com.example.android.temptext.database.ForecastDatabase
 import com.example.android.temptext.database.WeatherApplication
 import com.example.android.temptext.databinding.FragmentMainWeatherBinding
 import com.example.android.temptext.network.ForegroundOnlyLocationService
@@ -62,7 +60,6 @@ class MainWeatherFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var locationTextView: SearchView
 
-    //    private val weatherArgs: MainWeatherFragmentArgs by navArgs()
     // Listens for location broadcasts from ForegroundOnlyLocationService.
     private lateinit var foregroundOnlyBroadcastReceiver: ForegroundOnlyBroadcastReceiver
 
@@ -101,23 +98,12 @@ class MainWeatherFragment : Fragment() {
         cityTextView = binding.cityView
         foregroundOnlyBroadcastReceiver = ForegroundOnlyBroadcastReceiver()
 
-        setupAlerts()
+        getAlerts()
         searchLocation()
     }
 
-    private fun setupAlerts() {
-/*        val weatherData = weatherArgs.weatherDataPassed
-        degreeTextView.text = weatherData
-        val action = MainWeatherFragmentDirections.actionMainWeatherFragmentToSetUpAlertFragment(weatherData)
-        Log.d("MainWeather", weatherData)*/
+    private fun getAlerts() {
         alertsButton.setOnClickListener { findNavController().navigate(R.id.action_mainWeatherFragment_to_setUpAlertFragment) }
-
-        val db = Room.databaseBuilder(
-            this.requireContext(),
-            ForecastDatabase::class.java, "userInfo"
-        ).build()
-        val weatherObject = db.weatherDao()
-        val user = weatherObject!!.getAllUserInfo()
     }
 
     private fun searchLocation() {
@@ -129,13 +115,11 @@ class MainWeatherFragment : Fragment() {
                 viewModel.showCurrentWeather(API_KEY, query, "yes")
                 return true
             }
-
             override fun onQueryTextChange(newText: String?): Boolean {
                 return false
             }
         })
     }
-
     override fun onResume() {
         super.onResume()
         LocalBroadcastManager.getInstance(this.requireContext()).registerReceiver(
@@ -145,13 +129,10 @@ class MainWeatherFragment : Fragment() {
             )
         )
     }
-
+    //sets api call data to views
     private fun displayWeather() {
-        /*to avoid calling viewModel.observe multiple times
-        create array and iterate through to set data to views
-         */
         viewModel.apiResponse.observe(this, {
-            val responseArray = arrayListOf(it.currentLocation, it.currentWeather)
+            val apiData = arrayListOf(it.currentLocation, it.currentWeather)
             val currentWeather = it.currentWeather.currentWeatherCondition!!.currentCondition!!
             val city = it.currentLocation.city!!
             val airQuality = it.currentWeather.aqi!!.ozone!!
@@ -169,18 +150,13 @@ class MainWeatherFragment : Fragment() {
             } else if (airQuality >= 301) {
                 aqiTextView.text = resources.getString(R.string.hazardous)
             }
-            for (response in responseArray) {
-                degreeTextView.text = response.fahrenheit.toString()
-                precipTextView.text = response.precipitation.toString()
-                windTextView.text = response.wind.toString()
+            for (responseData in apiData) {
+                degreeTextView.text = responseData.fahrenheit.toString()
+                precipTextView.text = responseData.precipitation.toString()
+                windTextView.text = responseData.wind.toString()
                 statusTextView.text = currentWeather
                 cityTextView.text = city
             }
-        })
-    }
-    fun createWeatherArray(){
-        viewModel.apiResponse.observe(this, {
-            val responseArray = arrayListOf(it.currentLocation, it.currentWeather)
         })
     }
     //sets location data pulled from fused location provider as parameter for api url
@@ -195,7 +171,7 @@ class MainWeatherFragment : Fragment() {
                     val currentLocation = """$latitude,$longitude"""
                     viewModel.showCurrentWeather(API_KEY, currentLocation, "yes")
                 } else {
-                    MainWeatherFragment().requestForegroundPermissions()
+                    requestForegroundPermissions()
                     Log.d(
                         "ForeGroundError",
                         "getLastLocation:exception",

@@ -1,4 +1,4 @@
-package com.example.android.temptext.database
+    package com.example.android.temptext.database
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -18,7 +18,6 @@ class UserID {
             //creates new userId if one isn't created
             if (uniqueID == null) {
                 uniqueID = UUID.randomUUID().toString()
-
             }
         }
         return uniqueID

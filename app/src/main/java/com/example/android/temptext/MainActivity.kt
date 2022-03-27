@@ -9,11 +9,11 @@ import androidx.core.app.NotificationCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.android.temptext.databinding.ActivityMainBinding
+import com.example.android.temptext.network.ForegroundOnlyLocationService.Companion.NOTIFICATION_CHANNEL_ID
 
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private lateinit var binding: ActivityMainBinding
-    private val CHANNEL_ID = "25"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,11 +30,12 @@ class MainActivity : AppCompatActivity() {
     fun notification (){
        val textTitle = "alert"
        val textContent = "weather alerts"
-       var builder = NotificationCompat.Builder(this, CHANNEL_ID)
+           var builder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
        .setSmallIcon(R.drawable.notification_icon)
        .setContentTitle(textTitle)
        .setContentText(textContent)
-       .setPriority(NotificationCompat.PRIORITY_DEFAULT)}
+       .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+    }
 
     private fun createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
@@ -43,7 +44,8 @@ class MainActivity : AppCompatActivity() {
             val name = getString(R.string.channel_name)
             val descriptionText = getString(R.string.channel_description)
             val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(CHANNEL_ID, name, importance)
+            val channel = NotificationChannel(NOTIFICATION_CHANNEL_ID, name, importance)
         }
     }
+
 }

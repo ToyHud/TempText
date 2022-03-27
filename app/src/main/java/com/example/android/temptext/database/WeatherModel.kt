@@ -9,8 +9,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "userInfo")
 data class WeatherModel(
-    @PrimaryKey @NonNull @ColumnInfo(name = "id") val userId: String,
-    @ColumnInfo(name = "location") val currentLocation: String,
+    @PrimaryKey @NonNull @ColumnInfo(name = "uid") val primaryKey: String,
     @ColumnInfo(name = "celsius") val celsius: Float,
     @ColumnInfo(name = "fahrenheit") val fahrenheit: Float,
     @ColumnInfo(name = "city") val cityName: String,
@@ -25,14 +24,6 @@ data class TempTuple(
     @ColumnInfo(name = "celsius") val celsius: Float,
     @ColumnInfo(name = "fahrenheit") val fahrenheit: Float,
 )
-/*class UniqueIdTypeConverter(){
-    @TypeConverter
-    fun toWeatherEntity(entityType: String?): WeatherModel{
-        return
-    }
-}*/
-
-
 
 
 

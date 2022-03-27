@@ -7,15 +7,12 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Binder
-import android.os.Build
 import android.os.IBinder
 import android.os.Looper
 import android.provider.ContactsContract.Directory.PACKAGE_NAME
 import android.util.Log
 import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationCompat
 import com.example.android.temptext.BuildConfig
-import com.example.android.temptext.MainActivity
 import com.example.android.temptext.ui.MainWeatherFragment
 import com.google.android.gms.location.*
 import java.util.concurrent.TimeUnit
@@ -84,7 +81,7 @@ class ForegroundOnlyLocationService : Service() {
     }
 
 
-   /* fun subscribeToLocationUpdates() {
+    fun subscribeToLocationUpdates() {
         Log.d(TAG, "subscribeToLocationUpdates()")
 
         SharedPreferenceUtil.saveLocationTrackingPref(this, true)
@@ -102,7 +99,7 @@ class ForegroundOnlyLocationService : Service() {
             SharedPreferenceUtil.saveLocationTrackingPref(this, false)
             Log.e(TAG, "Lost location permissions. Couldn't remove updates. $unlikely")
         }
-    }*/
+    }
 
     fun unsubscribeToLocationUpdates() {
         Log.d(TAG, "unsubscribeToLocationUpdates()")
@@ -140,32 +137,6 @@ class ForegroundOnlyLocationService : Service() {
             REQUEST_PERMISSIONS_REQUEST_CODE
         )
     }
-
-/*    //sets location data pulled from fused location provider as parameter for api url
-    @SuppressLint("MissingPermission")
-    fun getLastLocation(activity: Activity) {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
-        fusedLocationClient.lastLocation
-            .addOnCompleteListener { location ->
-                Log.d("ForegroundLocate1", "$location")
-                Log.d("ForegroundLocateResult", "${location.result}")
-                if (location.isSuccessful && location.result != null) {
-                    val latitude = location.result.latitude
-                    val longitude = location.result.longitude
-                    val currentLocation = """$latitude,$longitude"""
-                    TempTextViewModel().showCurrentWeather(API_KEY, currentLocation, "yes")
-                    Log.d("MainLocate", currentLocation)
-                } else {
-                    MainWeatherFragment().requestForegroundPermissions()
-                    Log.d(
-                        "ForeGroundError",
-                        "getLastLocation:exception",
-                        location.exception
-                    )
-                    cancellationTokenSource.cancel()
-                }
-            }
-    }*/
 
     fun requestPermissions(activity: Activity) {
         if (ActivityCompat.shouldShowRequestPermissionRationale(
