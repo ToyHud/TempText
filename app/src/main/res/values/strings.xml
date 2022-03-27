@@ -41,5 +41,5 @@
     <string name="permission_rationale">Allow permissions</string>
     <string name="stop_location_updates_button_text">Stop Location Updates</string>
     <string name="channel_name">Alerts</string>
-    <string name="channel_description">Weather Alerts</string>
+    <string name="channel_description">Current temp is 70. Stay cool!</string>
 </resources>
