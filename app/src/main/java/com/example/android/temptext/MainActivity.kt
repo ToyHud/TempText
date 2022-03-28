@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         }
         val pendingIntent= PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
         val textTitle = "Temp Text Alert"
-        val textContent = "Current temp is 70. Stay cool!"
+        val textContent = "Current temp is above 70. Stay cool!"
         val notificationId = 1
         var builder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
             .setSmallIcon(R.drawable.notification_icon)
