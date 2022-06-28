@@ -48,3 +48,4 @@ During development of this application, all samples were built using Android Stu
 
 ## Thanks for visiting our TempText Repo
 We appreciate any and all input!
+Google Sites: https://sites.google.com/d/1V8UZ3OYON1_hm4a7znXuupZsCOwSUILS/p/10qCI7JplDjFgBuLJitmibd5-NNR2FH1U/edit
